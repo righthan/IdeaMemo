@@ -118,6 +118,8 @@ fun ChatInput(
         focusRequester.freeFocus()
         val content = text.text
         memosViewModel.insertOrUpdate(Note(content = content, attachments = uploadAttachments))
+        text = TextFieldValue("")
+        uploadAttachments.clear()
         dismiss()
     }
 
@@ -126,8 +128,6 @@ fun ChatInput(
         if (bottomSheetState) {
             focusRequester.requestFocus()
             softwareKeyboardController?.show()
-            text = TextFieldValue("")
-            uploadAttachments.clear()
         } else {
             softwareKeyboardController?.hide()
             // 弹框消失时执行你想要的操作
@@ -215,7 +215,6 @@ fun ChatInput(
             }
         }
     }
-
 
     if (isShow) {
         Box(
