@@ -243,7 +243,8 @@ fun ChatInput(
                     modifier
                         .focusRequester(focusRequester)
                         .fillMaxWidth()
-                        .heightIn(max = 280.dp),
+                        .heightIn(max = 280.dp)
+                        .clickable {  },
                     keyboardOptions = keyboardOptions,
                     label = { Text(R.string.any_thoughts.str) },
                 )
