@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Download
 import androidx.compose.material.icons.outlined.Explore
 import androidx.compose.material.icons.outlined.Fingerprint
 import androidx.compose.material.icons.outlined.Info
@@ -56,6 +57,7 @@ import com.ldlywt.note.ui.page.LocalTags
 import com.ldlywt.note.ui.page.data.DataManagerViewModel
 import com.ldlywt.note.ui.page.main.MainActivity
 import com.ldlywt.note.ui.page.router.Screen
+import com.ldlywt.note.utils.Constant
 import com.ldlywt.note.utils.SettingsPreferences
 import com.ldlywt.note.utils.TipsDialog
 import com.ldlywt.note.utils.lunchIo
@@ -257,6 +259,13 @@ fun SettingsPreferenceScreen(navController: NavHostController) {
                         iconPainter = rememberVectorPainter(image = Icons.Outlined.TipsAndUpdates),
                         iconColor = SaltTheme.colors.text,
                         iconPaddingValues = PaddingValues(all = 1.5.dp)
+                    )
+                    Item(
+                        onClick = {
+                            Constant.startGithubReleaseUrl(context)
+                        },
+                        text = R.string.new_version.str,
+                        iconPainter = rememberVectorPainter(Icons.Outlined.Download),
                     )
 
                     Item(

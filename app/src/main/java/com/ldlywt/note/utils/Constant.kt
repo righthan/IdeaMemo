@@ -10,6 +10,8 @@ object Constant {
 
 
     private val PRIVACY_POLICY = "https://www.freeprivacypolicy.com/live/07870fcd-c545-4b1c-9490-4d6de2d8bb5c"
+    private val GITHUB_RELEASE = "https://github.com/ldlywt/IdeaMemo/releases"
+    private val GITHUB_URL = "https://github.com/ldlywt/IdeaMemo"
 
     const val JIANGUOYUN_URL = "https://dav.jianguoyun.com/dav/"
 
@@ -26,6 +28,20 @@ object Constant {
 
     fun startPrivacyUrl(context: Context) {
         val uri: Uri = Uri.parse(PRIVACY_POLICY)
+        val intent = Intent(Intent.ACTION_VIEW, uri)
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent)
+    }
+
+    fun startGithubReleaseUrl(context: Context) {
+        val uri: Uri = Uri.parse(GITHUB_RELEASE)
+        val intent = Intent(Intent.ACTION_VIEW, uri)
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent)
+    }
+
+    fun startGithubUrl(context: Context) {
+        val uri: Uri = Uri.parse(GITHUB_URL)
         val intent = Intent(Intent.ACTION_VIEW, uri)
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent)

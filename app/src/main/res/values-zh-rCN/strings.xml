@@ -96,4 +96,6 @@
     <string name="dark_mode">深色</string>
     <string name="follow_system">系统</string>
     <string name="exit">退出</string>
+    <string name="new_version">下载地址</string>
+    <string name="github">开源地址</string>
 </resources>

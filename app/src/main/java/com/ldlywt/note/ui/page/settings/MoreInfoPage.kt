@@ -12,6 +12,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Assignment
+import androidx.compose.material.icons.outlined.Code
 import androidx.compose.material.icons.outlined.Contactless
 import androidx.compose.material.icons.outlined.Feedback
 import androidx.compose.material.icons.outlined.LocalCafe
@@ -88,6 +89,9 @@ fun MoreInfoPage(
         },
         SettingsBean(R.string.privacy_policy, Icons.Outlined.PrivacyTip) {
             Constant.startPrivacyUrl(context)
+        },
+        SettingsBean(R.string.github, Icons.Outlined.Code) {
+            Constant.startGithubUrl(context)
         },
     )
 

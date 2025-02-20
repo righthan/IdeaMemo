@@ -98,4 +98,6 @@
     <string name="sure">Sure</string>
     <string name="share_app">Share App</string>
     <string name="exit">Exit</string>
+    <string name="new_version">New Version</string>
+    <string name="github">Github</string>
 </resources>
