@@ -156,7 +156,7 @@ fun SettingsPreferenceScreen(navController: NavHostController) {
                         iconPaddingValues = PaddingValues(all = 1.8.dp),
                         iconColor = SaltTheme.colors.text,
                         text = stringResource(R.string.theme_mode_switcher_text),
-                        selectedItem = themeMode.name,
+                        selectedItem = stringResource(id = themeMode.resId),
                         popupWidth = 140
                     ) {
 
