@@ -20,7 +20,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
 import androidx.compose.ui.zIndex
@@ -33,11 +32,11 @@ import kotlinx.coroutines.launch
 @Composable
 fun InputImage(
     attachment: Attachment,
+    isEdit: Boolean,
     delete: (path: String) -> Unit
 ) {
     var menuExpanded by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
-    val context = LocalContext.current
 
     Box {
         AsyncImage(
@@ -53,25 +52,27 @@ fun InputImage(
                 },
             contentScale = ContentScale.Crop
         )
-        DropdownMenu(
-            expanded = menuExpanded,
-            onDismissRequest = { menuExpanded = false },
-            properties = PopupProperties(focusable = false)
-        ) {
-            DropdownMenuItem(
-                text = { Text(R.string.delete.str) },
-                onClick = {
-                    scope.launch {
-                        delete(attachment.path)
-                        menuExpanded = false
-                    }
-                },
-                leadingIcon = {
-                    Icon(
-                        Icons.Outlined.Delete,
-                        contentDescription = null
-                    )
-                })
+        if (isEdit) {
+            DropdownMenu(
+                expanded = menuExpanded,
+                onDismissRequest = { menuExpanded = false },
+                properties = PopupProperties(focusable = false)
+            ) {
+                DropdownMenuItem(
+                    text = { Text(R.string.delete.str) },
+                    onClick = {
+                        scope.launch {
+                            delete(attachment.path)
+                            menuExpanded = false
+                        }
+                    },
+                    leadingIcon = {
+                        Icon(
+                            Icons.Outlined.Delete,
+                            contentDescription = null
+                        )
+                    })
+            }
         }
     }
 }

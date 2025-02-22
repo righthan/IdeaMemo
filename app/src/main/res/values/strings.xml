@@ -20,6 +20,7 @@
     <string name="share">Share</string>
     <string name="copy">Copy</string>
     <string name="edit">Edit</string>
+    <string name="preview">Preview</string>
     <string name="delete">Delete</string>
     <string name="webdav_config_success">Nut Cloud configuration successful</string>
     <string name="excute_success">Execute Success</string>

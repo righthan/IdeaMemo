@@ -21,6 +21,7 @@
     <string name="share">分享</string>
     <string name="copy">复制</string>
     <string name="edit">编辑</string>
+    <string name="preview">预览</string>
     <string name="delete">删除</string>
     <string name="webdav_config_success">Webdav配置成功</string>
     <string name="excute_success">执行成功</string>

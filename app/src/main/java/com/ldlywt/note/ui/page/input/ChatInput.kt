@@ -30,7 +30,6 @@ import androidx.compose.material.icons.outlined.Send
 import androidx.compose.material.icons.outlined.Tag
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -61,13 +60,13 @@ import com.ldlywt.note.bean.Attachment
 import com.ldlywt.note.bean.Note
 import com.ldlywt.note.bean.Tag
 import com.ldlywt.note.component.PIconButton
-import com.ldlywt.note.utils.lunchMain
-import com.ldlywt.note.ui.page.home.clickable
-import com.ldlywt.note.utils.handlePickFiles
-import com.ldlywt.note.utils.str
-import com.ldlywt.note.utils.toast
 import com.ldlywt.note.ui.page.LocalMemosViewModel
 import com.ldlywt.note.ui.page.LocalTags
+import com.ldlywt.note.ui.page.home.clickable
+import com.ldlywt.note.utils.handlePickFiles
+import com.ldlywt.note.utils.lunchMain
+import com.ldlywt.note.utils.str
+import com.ldlywt.note.utils.toast
 import com.moriafly.salt.ui.SaltTheme
 import kotlinx.coroutines.launch
 import java.io.File
@@ -255,7 +254,7 @@ fun ChatInput(
                             .padding(start = 15.dp, end = 15.dp, bottom = 15.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
                         items(uploadAttachments.toList(), { it.path }) { resource ->
-                            InputImage(attachment = resource) { pat ->
+                            InputImage(attachment = resource, true) { pat ->
                                 uploadAttachments.remove(uploadAttachments.firstOrNull { it.path == pat })
                             }
                         }
