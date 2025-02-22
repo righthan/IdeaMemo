@@ -6,12 +6,11 @@ import android.net.Uri
 
 object Constant {
 
-    private val USER_AGREEMENT = "https://www.freeprivacypolicy.com/live/77fb28fd-1c21-4a6c-8c8b-1464c314d629"
-
-
-    private val PRIVACY_POLICY = "https://www.freeprivacypolicy.com/live/07870fcd-c545-4b1c-9490-4d6de2d8bb5c"
-    private val GITHUB_RELEASE = "https://github.com/ldlywt/IdeaMemo/releases"
-    private val GITHUB_URL = "https://github.com/ldlywt/IdeaMemo"
+    val USER_AGREEMENT = "https://www.freeprivacypolicy.com/live/77fb28fd-1c21-4a6c-8c8b-1464c314d629"
+    val PRIVACY_POLICY = "https://www.freeprivacypolicy.com/live/07870fcd-c545-4b1c-9490-4d6de2d8bb5c"
+    val GITHUB_RELEASE = "https://github.com/ldlywt/IdeaMemo/releases"
+    val GITHUB_URL = "https://github.com/ldlywt/IdeaMemo"
+    val GITHUB_FEEDBACK_URL = "https://github.com/ldlywt/IdeaMemo/issues/2"
 
     const val JIANGUOYUN_URL = "https://dav.jianguoyun.com/dav/"
 
@@ -46,4 +45,12 @@ object Constant {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent)
     }
+}
+
+fun Context.openUrl(url: String) {
+    val uri: Uri = Uri.parse(url)
+    val intent = Intent(Intent.ACTION_VIEW, uri)
+    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    startActivity(intent)
+
 }

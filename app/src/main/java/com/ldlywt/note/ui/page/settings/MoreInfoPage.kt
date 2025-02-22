@@ -44,6 +44,7 @@ import com.ldlywt.note.R
 import com.ldlywt.note.utils.Constant
 import com.ldlywt.note.utils.DonateUtils
 import com.ldlywt.note.utils.openMail
+import com.ldlywt.note.utils.openUrl
 import com.ldlywt.note.utils.shareApp
 import com.ldlywt.note.utils.str
 import com.moriafly.salt.ui.Item
@@ -85,13 +86,13 @@ fun MoreInfoPage(
     )
     val aboutList = listOf(
         SettingsBean(R.string.user_agree, Icons.AutoMirrored.Outlined.Assignment) {
-            Constant.startUserAgreeUrl(context)
+            context.openUrl(Constant.USER_AGREEMENT)
         },
         SettingsBean(R.string.privacy_policy, Icons.Outlined.PrivacyTip) {
-            Constant.startPrivacyUrl(context)
+            context.openUrl(Constant.PRIVACY_POLICY)
         },
         SettingsBean(R.string.github, Icons.Outlined.Code) {
-            Constant.startGithubUrl(context)
+            context.openUrl(Constant.GITHUB_URL)
         },
     )
 

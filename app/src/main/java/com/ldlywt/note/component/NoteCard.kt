@@ -83,13 +83,6 @@ fun NoteCard(
             Spacer(modifier = Modifier.height(8.dp))
             locationAndTimeText(note.createTime.toTime(), modifier = Modifier.padding(start = 2.dp))
             showLocationInfoContent(note)
-//            val filterTagList = tags.filterNot { it.tag.isBlank() || it.isCityTag }
-//            if (filterTagList.isNotEmpty()) {
-//                Spacer(modifier = Modifier.height(4.dp))
-//                Box(modifier = Modifier.padding(start = 2.dp)) {
-//                    tagContent(filterTagList, navHostController, from)
-//                }
-//            }
         }
     }
     ActionBottomSheet(navHostController, noteShowBean, show = openBottomSheet) {
