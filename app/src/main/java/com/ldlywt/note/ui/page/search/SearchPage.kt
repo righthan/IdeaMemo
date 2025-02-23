@@ -38,6 +38,7 @@ import androidx.navigation.NavHostController
 import com.ldlywt.note.R
 import com.ldlywt.note.component.NoteCard
 import com.ldlywt.note.component.NoteCardFrom
+import com.ldlywt.note.utils.SettingsPreferences
 import com.moriafly.salt.ui.SaltTheme
 import kotlinx.coroutines.delay
 
@@ -53,6 +54,7 @@ fun SearchPage(
     val searchQuery by searchViewModel.query.collectAsState()
     val focusRequester = remember { FocusRequester() }
     val filterList by searchViewModel.dataFlow.collectAsState(initial = emptyList())
+    val maxLine by SettingsPreferences.cardMaxLine.collectAsState(SettingsPreferences.CardMaxLineMode.MAX_LINE)
 
     Box(Modifier.fillMaxSize()) {
         SearchBar(
@@ -111,7 +113,7 @@ fun SearchPage(
                     Spacer(modifier = Modifier.height(16.dp))
                 }
                 items(count = filterList.size, key = { it }) { index ->
-                    NoteCard(noteShowBean = filterList[index], navController, from = NoteCardFrom.SEARCH)
+                    NoteCard(noteShowBean = filterList[index], navController, from = NoteCardFrom.SEARCH, maxLine = maxLine.line)
                 }
                 item {
                     Spacer(modifier = Modifier.height(60.dp))

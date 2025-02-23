@@ -22,8 +22,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -35,6 +37,7 @@ import com.ldlywt.note.bean.Note
 import com.ldlywt.note.bean.NoteShowBean
 import com.ldlywt.note.bean.Tag
 import com.ldlywt.note.ui.page.router.Screen
+import com.ldlywt.note.utils.SettingsPreferences
 import com.ldlywt.note.utils.toTime
 import com.moriafly.salt.ui.SaltTheme
 import com.moriafly.salt.ui.UnstableSaltApi
@@ -46,13 +49,10 @@ enum class NoteCardFrom {
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class, UnstableSaltApi::class)
 @Composable
-fun NoteCard(
-    noteShowBean: NoteShowBean, navHostController: NavHostController, from: NoteCardFrom = NoteCardFrom.COMMON
-) {
+fun NoteCard(noteShowBean: NoteShowBean, navHostController: NavHostController, maxLine: Int, from: NoteCardFrom = NoteCardFrom.COMMON) {
 
     var openBottomSheet by rememberSaveable { mutableStateOf(false) }
     val note = noteShowBean.note
-    val tags = noteShowBean.tagList
     Card(
         colors = CardDefaults.cardColors(containerColor = SaltTheme.colors.subBackground),
         modifier = Modifier
@@ -71,11 +71,13 @@ fun NoteCard(
                 .fillMaxWidth()
                 .padding(12.dp)
         ) {
-            MarkdownText(markdown = note.content, style = SaltTheme.textStyles.paragraph.copy(fontSize = 15.sp, lineHeight = 24.sp), onTagClick = {
-                if (from == NoteCardFrom.COMMON) {
-                    navHostController.navigate(Screen.TagDetail(it))
-                }
-            })
+            MarkdownText(markdown = note.content,
+                maxLines = maxLine,
+                style = SaltTheme.textStyles.paragraph.copy(fontSize = 15.sp, lineHeight = 24.sp), onTagClick = {
+                    if (from == NoteCardFrom.COMMON) {
+                        navHostController.navigate(Screen.TagDetail(it))
+                    }
+                })
             if (note.attachments.isNotEmpty()) {
                 Spacer(modifier = Modifier.height(8.dp))
                 ImageCard(note, navHostController)

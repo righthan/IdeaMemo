@@ -22,6 +22,7 @@ import androidx.compose.material.icons.outlined.Explore
 import androidx.compose.material.icons.outlined.Fingerprint
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Label
+import androidx.compose.material.icons.outlined.LineStyle
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.Photo
 import androidx.compose.material.icons.outlined.Tag
@@ -110,11 +111,13 @@ fun SettingsPreferenceScreen(navController: NavHostController) {
 
     val context = LocalContext.current
     val themeModePopupMenuState = rememberPopupState()
+    val maxLinePopupMenuState = rememberPopupState()
     val settingsViewModel = hiltViewModel<SettingsViewModel>()
     val biometricAuthState by settingsViewModel.biometricAuthState.collectAsState()
     var showWarnDialog by rememberSaveable { mutableStateOf(false) }
     val dynamicColor by SettingsPreferences.dynamicColor.collectAsState(false)
     val themeMode by SettingsPreferences.themeMode.collectAsState(SettingsPreferences.ThemeMode.SYSTEM)
+    val maxLine by SettingsPreferences.cardMaxLine.collectAsState(SettingsPreferences.CardMaxLineMode.MAX_LINE)
     val scope = rememberCoroutineScope()
 
     val settingList = listOf(
@@ -174,15 +177,45 @@ fun SettingsPreferenceScreen(navController: NavHostController) {
                             PopupMenuItem(
                                 onClick = {
                                     selectedIndex = index
-                                    val themeMode = SettingsPreferences.ThemeMode.entries[index]
                                     scope.launch {
-                                        SettingsPreferences.changeThemeMode(themeMode)
+                                        SettingsPreferences.changeThemeMode(SettingsPreferences.ThemeMode.entries[index])
                                     }
                                     themeModePopupMenuState.dismiss()
                                 },
                                 selected = selectedIndex == 0,
                                 text = label,
-//                        iconPainter = painterResource(id = R.drawable.light_color),
+                                iconColor = SaltTheme.colors.text
+                            )
+                        }
+                    }
+
+                    ItemPopup(
+                        state = maxLinePopupMenuState,
+                        iconPainter = rememberVectorPainter(Icons.Outlined.LineStyle),
+                        iconPaddingValues = PaddingValues(all = 1.8.dp),
+                        iconColor = SaltTheme.colors.text,
+                        text = stringResource(R.string.card_note_maxline),
+                        selectedItem = maxLine.line.toString(),
+                        popupWidth = 140
+                    ) {
+                        val options = SettingsPreferences.CardMaxLineMode.entries.map { it.line.toString() }
+                        var selectedIndex by remember {
+                            mutableIntStateOf(
+                                SettingsPreferences.CardMaxLineMode.entries.indexOf(maxLine)
+                            )
+                        }
+
+                        options.forEachIndexed { index, label ->
+                            PopupMenuItem(
+                                onClick = {
+                                    selectedIndex = index
+                                    scope.launch {
+                                        SettingsPreferences.changeMaxLine(SettingsPreferences.CardMaxLineMode.entries[index])
+                                    }
+                                    maxLinePopupMenuState.dismiss()
+                                },
+                                selected = selectedIndex == 0,
+                                text = label,
                                 iconColor = SaltTheme.colors.text
                             )
                         }

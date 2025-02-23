@@ -99,4 +99,5 @@
     <string name="exit">退出</string>
     <string name="new_version">下载地址</string>
     <string name="github">开源地址</string>
+    <string name="card_note_maxline">首页卡片最大行数</string>
 </resources>

@@ -19,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -36,18 +37,20 @@ import com.ldlywt.note.component.NoteCardFrom
 import com.ldlywt.note.component.RYScaffold
 import com.ldlywt.note.utils.toMM
 import com.ldlywt.note.ui.page.LocalMemosViewModel
+import com.ldlywt.note.utils.SettingsPreferences
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun YearDetailPage(year: String, navController: NavHostController) {
     val noteViewModel = LocalMemosViewModel.current
     var showYearBottomSheet by rememberSaveable { mutableStateOf(false) }
-    val yearList= remember { mutableStateListOf<NoteShowBean>() }
-    val filterYearList= remember { mutableStateListOf<NoteShowBean>() }
+    val yearList = remember { mutableStateListOf<NoteShowBean>() }
+    val filterYearList = remember { mutableStateListOf<NoteShowBean>() }
     var pageTitle = remember { mutableStateOf(year) }
+    val maxLine by SettingsPreferences.cardMaxLine.collectAsState(SettingsPreferences.CardMaxLineMode.MAX_LINE)
 
     LaunchedEffect(key1 = Unit, block = {
-        noteViewModel.getNotesByYear(year).collect{
+        noteViewModel.getNotesByYear(year).collect {
             yearList.clear()
             yearList.addAll(it)
             filterYearList.clear()
@@ -79,10 +82,10 @@ fun YearDetailPage(year: String, navController: NavHostController) {
                                 .padding(horizontal = 4.dp)
                                 .align(alignment = Alignment.CenterVertically),
                             onClick = {
-                                val filteredList = yearList.filter { it.note.createTime.toMM() == monthList[index]}
+                                val filteredList = yearList.filter { it.note.createTime.toMM() == monthList[index] }
                                 filterYearList.clear()
                                 filterYearList.addAll(filteredList)
-                                pageTitle.value =  year.plus("/").plus(monthList[index])
+                                pageTitle.value = year.plus("/").plus(monthList[index])
                                 onDismissRequest()
                             },
                             label = {
@@ -112,7 +115,7 @@ fun YearDetailPage(year: String, navController: NavHostController) {
     ) {
         LazyColumn {
             items(count = filterYearList.size, key = { it }) { index ->
-                NoteCard(noteShowBean = filterYearList[index], navController, from = NoteCardFrom.TAG_DETAIL)
+                NoteCard(noteShowBean = filterYearList[index], navController, from = NoteCardFrom.TAG_DETAIL, maxLine = maxLine.line)
             }
             item {
                 Spacer(modifier = Modifier.height(60.dp))

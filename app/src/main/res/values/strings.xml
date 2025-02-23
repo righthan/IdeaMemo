@@ -101,4 +101,5 @@
     <string name="exit">Exit</string>
     <string name="new_version">New Version</string>
     <string name="github">Github</string>
+    <string name="card_note_maxline">Card MaxLine</string>
 </resources>

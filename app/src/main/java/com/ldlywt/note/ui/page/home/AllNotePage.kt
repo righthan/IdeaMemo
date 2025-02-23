@@ -65,7 +65,7 @@ fun AllNotesPage(
     var openFilterBottomSheet by rememberSaveable { mutableStateOf(false) }
     var showWarnDialog by rememberSaveable { mutableStateOf(false) }
     var showInputDialog by rememberSaveable { mutableStateOf(false) }
-
+    val maxLine by SettingsPreferences.cardMaxLine.collectAsState(SettingsPreferences.CardMaxLineMode.MAX_LINE)
     LaunchedEffect(Unit) {
         showWarnDialog = SettingsPreferences.firstLaunch.first()
     }
@@ -97,7 +97,7 @@ fun AllNotesPage(
                     .fillMaxSize()
             ) {
                 items(count = noteState.notes.size, key = { it }) { index ->
-                    NoteCard(noteShowBean = noteState.notes[index], navController)
+                    NoteCard(noteShowBean = noteState.notes[index], navController, maxLine = maxLine.line)
                 }
                 item {
                     Spacer(modifier = Modifier.height(100.dp))

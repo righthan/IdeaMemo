@@ -15,6 +15,7 @@ import androidx.navigation.NavHostController
 import com.ldlywt.note.component.NoteCard
 import com.ldlywt.note.component.NoteCardFrom
 import com.ldlywt.note.ui.page.LocalMemosViewModel
+import com.ldlywt.note.utils.SettingsPreferences
 import com.moriafly.salt.ui.SaltTheme
 import com.moriafly.salt.ui.TitleBar
 import com.moriafly.salt.ui.UnstableSaltApi
@@ -24,6 +25,7 @@ import com.moriafly.salt.ui.UnstableSaltApi
 fun TagDetailPage(tag: String, navController: NavHostController) {
     val noteViewModel = LocalMemosViewModel.current
     val tagList by noteViewModel.getNoteListByTagFlow(tag).collectAsState(initial = emptyList())
+    val maxLine by SettingsPreferences.cardMaxLine.collectAsState(SettingsPreferences.CardMaxLineMode.MAX_LINE)
 
     Column(
         modifier = Modifier
@@ -42,7 +44,7 @@ fun TagDetailPage(tag: String, navController: NavHostController) {
 
         LazyColumn {
             items(count = tagList.size, key = { it }) { index ->
-                NoteCard(noteShowBean = tagList[index], navController, from = NoteCardFrom.TAG_DETAIL)
+                NoteCard(noteShowBean = tagList[index], navController, from = NoteCardFrom.TAG_DETAIL,maxLine = maxLine.line)
             }
             item {
                 Spacer(modifier = Modifier.height(60.dp))

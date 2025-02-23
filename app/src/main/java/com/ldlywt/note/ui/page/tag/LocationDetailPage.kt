@@ -13,16 +13,18 @@ import com.ldlywt.note.component.NoteCard
 import com.ldlywt.note.component.NoteCardFrom
 import com.ldlywt.note.component.RYScaffold
 import com.ldlywt.note.ui.page.LocalMemosViewModel
+import com.ldlywt.note.utils.SettingsPreferences
 
 @Composable
 fun LocationDetailPage(location: String, navController: NavHostController) {
     val noteViewModel = LocalMemosViewModel.current
     val list by noteViewModel.getNotesByLocationInfo(location).collectAsState(initial = emptyList())
+    val maxLine by SettingsPreferences.cardMaxLine.collectAsState(SettingsPreferences.CardMaxLineMode.MAX_LINE)
 
     RYScaffold(title = location, navController = navController) {
         LazyColumn {
             items(count = list.size, key = { it }) { index ->
-                NoteCard(noteShowBean = list[index], navController, from = NoteCardFrom.TAG_DETAIL)
+                NoteCard(noteShowBean = list[index], navController, from = NoteCardFrom.TAG_DETAIL, maxLine = maxLine.line)
             }
             item {
                 Spacer(modifier = Modifier.height(60.dp))
