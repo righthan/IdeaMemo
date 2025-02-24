@@ -6,12 +6,17 @@
     <a href="https://imgse.com/i/pEK8AXT"><img src="https://s21.ax1x.com/2025/02/15/pEK8AXT.md.jpg" alt="pEK8AXT.jpg" border="0" /></a>
     <br/>
     <br/>
+</div>
+
+## 🖌️ 截图
+
+<div>
     <img src="https://s21.ax1x.com/2025/02/15/pEK8gEQ.png" width="32.2%" alt="" />
     <img src="https://s21.ax1x.com/2025/02/15/pEK86Hg.png" width="32.2%" alt="" />
     <img src="https://s21.ax1x.com/2025/02/15/pEK8yDS.png" width="32.2%" alt="" />
 </div>
 
-## Features
+## ✨ 特征
 
 **IdeaMemo** 是一款 Android 轻量级以标签 Tag 为核心的卡片便签App。
 
@@ -25,10 +30,22 @@
 - **持续更新**：IdeaMemo App 自己一直在使用中，会持续更新。
 - ...
 
-## ToDo
+## 🚀 TODO
 [App后续版本已经迭代计划](https://github.com/ldlywt/IdeaMemo/issues/2)
 
-## 鸣谢
+## ✈️ 下载
+
+[<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png"
+     alt="Get it on Google Play"
+     height="80">](https://play.google.com/store/apps/details?id=com.ldlywt.note)
+[<img src="https://s1.ax1x.com/2023/01/12/pSu1a36.png" alt="Get it on GitHub" height="80">](https://github.com/ldlywt/IdeaMemo/releases/latest)     
+
+## 🤝 如果贡献
+- **欢迎贡献代码**，但请不要提交简单的修复代码，有可能会被拒绝！
+- **分享您的想法和建议**，如果您缺少一项功能或有一个有趣的想法，请随时创建一个新的*问题*。
+- **报告错误** 遇到崩溃或出错？创建一个新的*问题*，尽可能详细地尽可能详细，以帮助解决问题。
+
+## 🤗 鸣谢
 
 该项目由 Compose 创建。该项目的部分代码源自优秀的开源项目。
 
@@ -42,12 +59,12 @@
 - [SaltUI](https://github.com/Moriafly/SaltUI)
 - ...
 
-## License
+## 🧾 License
 GNU GPL v3.0 © [IdeaMemo](https://github.com/ldlywt/IdeaMemo/blob/master/LICENSE)
 
 
 您的star是我最大的动力，谢谢！ **🌟**
 
-## Star History
+## ⭐ Star History
 
 [![Star History Chart]( https://api.star-history.com/svg?repos=ldlywt/IdeaMemo&type=Date)]( https://star-history.com/#ldlywt/IdeaMemo&Date)
