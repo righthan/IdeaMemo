@@ -70,6 +70,6 @@ suspend fun handlePickFiles(
                 }
             }
         }
+        callback(items)
     }
-    callback(items)
 }

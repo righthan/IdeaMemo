@@ -45,7 +45,7 @@ import com.ldlywt.note.ui.page.LocalMemosState
 import com.ldlywt.note.ui.page.LocalMemosViewModel
 import com.ldlywt.note.ui.page.NoteViewModel
 import com.ldlywt.note.ui.page.SortTime
-import com.ldlywt.note.ui.page.input.ChatInput
+import com.ldlywt.note.ui.page.input.ChatInputDialog
 import com.ldlywt.note.ui.page.router.Screen
 import com.ldlywt.note.utils.FirstTimeWarmDialog
 import com.ldlywt.note.utils.SettingsPreferences
@@ -111,7 +111,7 @@ fun AllNotesPage(
                 }
             }
 
-            ChatInput(
+            ChatInputDialog(
                 isShow = showInputDialog,
                 modifier =
                 Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 16.dp),

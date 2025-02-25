@@ -7,9 +7,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
@@ -18,7 +20,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -28,6 +29,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
@@ -46,9 +48,9 @@ import com.ldlywt.note.R
 import com.ldlywt.note.bean.NoteShowBean
 import com.ldlywt.note.component.CardCalender
 import com.ldlywt.note.component.EmptyComponent
+import com.ldlywt.note.ui.page.LocalMemosViewModel
 import com.ldlywt.note.utils.lunchIo
 import com.ldlywt.note.utils.str
-import com.ldlywt.note.ui.page.LocalMemosViewModel
 import com.moriafly.salt.ui.SaltTheme
 import java.time.LocalDate
 import java.time.YearMonth
@@ -68,8 +70,9 @@ fun CalenderPage(navController: NavHostController) {
     val today = remember { LocalDate.now() }
     var currentLocalDate by remember { mutableStateOf(LocalDate.now()) }
     val filterList: SnapshotStateList<NoteShowBean> = remember { mutableStateListOf<NoteShowBean>() }
+    val scope = rememberCoroutineScope()
 
-    val state: CalendarState = rememberCalendarState(
+    val calendarState: CalendarState = rememberCalendarState(
         startMonth = startMonth,
         endMonth = endMonth,
         firstVisibleMonth = currentMonth,
@@ -85,54 +88,56 @@ fun CalenderPage(navController: NavHostController) {
         }
     }
 
-    Scaffold(
-        containerColor = SaltTheme.colors.background,
-        topBar = {
-            IndexTopBar(currentLocalDate, navigateToToday = {
-                currentLocalDate = LocalDate.now()
-            })
-        }, content = {
-            LazyColumn {
-                stickyHeader {
-                    Column {
-                        Spacer(modifier = Modifier.height(100.dp))
-                        HorizontalCalendar(
-                            modifier = Modifier.testTag("Calendar").background(SaltTheme.colors.background),
-                            state = state,
-                            dayContent = { day: CalendarDay ->
-                                val hasScheme = noteViewModel.levelMemosMap.containsKey(day.date)
-                                Day(day, today, hasScheme = hasScheme, isSelected = currentLocalDate == day.date) { calendarDay: CalendarDay ->
-                                    currentLocalDate = calendarDay.date
-                                }
-                            },
-                            monthHeader = {
-                                MonthHeader(daysOfWeek = daysOfWeek)
-                            },
-                        )
-                    }
-                }
-
-                if (filterList.isEmpty()) {
-                    item {
-                        EmptyComponent(
-                            Modifier
-                                .fillMaxWidth()
-                                .height(height = 300.dp)
-                        )
-                    }
-                }
-
-                if (filterList.isNotEmpty()) {
-                    items(count = filterList.size, key = { it }) { index ->
-                        CardCalender(noteShowBean = filterList[index], navController)
-                    }
-                    item {
-                        Spacer(modifier = Modifier.height(100.dp))
-                    }
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(SaltTheme.colors.background)
+            .statusBarsPadding()
+    ) {
+        IndexTopBar(currentLocalDate, navigateToToday = {
+            currentLocalDate = LocalDate.now()
+        })
+        LazyColumn {
+            stickyHeader {
+                Column {
+                    HorizontalCalendar(
+                        modifier = Modifier
+                            .testTag("Calendar")
+                            .background(SaltTheme.colors.background),
+                        state = calendarState,
+                        dayContent = { day: CalendarDay ->
+                            val hasScheme = noteViewModel.levelMemosMap.containsKey(day.date)
+                            Day(day, today, hasScheme = hasScheme, isSelected = currentLocalDate == day.date) { calendarDay: CalendarDay ->
+                                currentLocalDate = calendarDay.date
+                            }
+                        },
+                        monthHeader = {
+                            MonthHeader(daysOfWeek = daysOfWeek)
+                        },
+                    )
                 }
             }
 
-        })
+            if (filterList.isEmpty()) {
+                item {
+                    EmptyComponent(
+                        Modifier
+                            .fillMaxWidth()
+                            .height(height = 300.dp)
+                    )
+                }
+            }
+
+            if (filterList.isNotEmpty()) {
+                items(count = filterList.size, key = { it }) { index ->
+                    CardCalender(noteShowBean = filterList[index], navController)
+                }
+                item {
+                    Spacer(modifier = Modifier.height(100.dp))
+                }
+            }
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -172,7 +177,9 @@ fun IndexTopBar(
                         imageVector = Icons.Rounded.CalendarToday, contentDescription = "Today", tint = SaltTheme.colors.text
                     )
                     Text(
-                        text = LocalDate.now().dayOfMonth.toString(), style = MaterialTheme.typography.bodySmall.copy(color = SaltTheme.colors.text), modifier = Modifier.padding(top = 4.dp)
+                        text = LocalDate.now().dayOfMonth.toString(),
+                        style = MaterialTheme.typography.bodySmall.copy(color = SaltTheme.colors.text),
+                        modifier = Modifier.padding(top = 4.dp)
                     )
                 }
             }

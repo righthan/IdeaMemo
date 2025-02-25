@@ -9,6 +9,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MemoInputViewModel @Inject constructor(private val tagNoteRepo: TagNoteRepo) : ViewModel() {
+
     fun deleteResource(path: String) {
         uploadAttachments.remove(uploadAttachments.firstOrNull { it.path == path })
     }

@@ -36,13 +36,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -55,8 +53,8 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
 import androidx.core.content.FileProvider
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.ldlywt.note.R
-import com.ldlywt.note.bean.Attachment
 import com.ldlywt.note.bean.Note
 import com.ldlywt.note.bean.Tag
 import com.ldlywt.note.component.PIconButton
@@ -64,7 +62,6 @@ import com.ldlywt.note.ui.page.LocalMemosViewModel
 import com.ldlywt.note.ui.page.LocalTags
 import com.ldlywt.note.ui.page.home.clickable
 import com.ldlywt.note.utils.handlePickFiles
-import com.ldlywt.note.utils.lunchMain
 import com.ldlywt.note.utils.str
 import com.ldlywt.note.utils.toast
 import com.moriafly.salt.ui.SaltTheme
@@ -72,7 +69,7 @@ import kotlinx.coroutines.launch
 import java.io.File
 
 @Composable
-fun ChatInput(
+fun ChatInputDialog(
     isShow: Boolean,
     modifier: Modifier = Modifier,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
@@ -84,41 +81,45 @@ fun ChatInput(
     val coroutineScope = rememberCoroutineScope()
     val focusRequester = remember { FocusRequester() }
     var text: TextFieldValue by remember { mutableStateOf(TextFieldValue("")) }
-    val uploadAttachments: SnapshotStateList<Attachment> = remember { mutableStateListOf() }
     val context = LocalContext.current
     var tagMenuExpanded by remember { mutableStateOf(false) }
     var locationMenuExpanded by remember { mutableStateOf(false) }
     var photoImageUri by remember { mutableStateOf<Uri?>(null) }
     val tagList = LocalTags.current.filterNot { it.isCityTag }
     val memosViewModel = LocalMemosViewModel.current
+    val memoInputViewModel = hiltViewModel<MemoInputViewModel>()
     val locationInfoList by memosViewModel.getAllLocationInfo().collectAsState(initial = emptyList())
 
-    fun uploadImage(uri: Uri) = coroutineScope.launch {
-        lunchMain {
-            handlePickFiles(setOf(uri)) {
-                uploadAttachments.addAll(it)
+    val takePhoto = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+        if (success) {
+            photoImageUri?.let {
+                coroutineScope.launch {
+                    handlePickFiles(setOf(it)) {
+                        memoInputViewModel.uploadAttachments.addAll(it)
+                    }
+                }
             }
         }
     }
 
-    val pickImage = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-        uri?.let { uploadImage(it) }
-    }
-
-    val takePhoto = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { success ->
-        if (success) {
-            photoImageUri?.let { uploadImage(it) }
+    // 创建一个 launcher，用于选择多张图片
+    val pickMultipleMedia = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickMultipleVisualMedia(3) // 最多选择 3 张图片
+    ) { uris ->
+        coroutineScope.launch {
+            handlePickFiles(uris.toSet()) {
+                memoInputViewModel.uploadAttachments.addAll(it)
+            }
         }
-
     }
 
     fun submit() = coroutineScope.launch {
         softwareKeyboardController?.hide()
         focusRequester.freeFocus()
         val content = text.text
-        memosViewModel.insertOrUpdate(Note(content = content, attachments = uploadAttachments))
+        memosViewModel.insertOrUpdate(Note(content = content, attachments = memoInputViewModel.uploadAttachments.toList()))
         text = TextFieldValue("")
-        uploadAttachments.clear()
+        memoInputViewModel.uploadAttachments.clear()
         dismiss()
     }
 
@@ -134,7 +135,7 @@ fun ChatInput(
     }
 
     @Composable
-    fun TagButton(tagList: List<Tag>, ) {
+    fun TagButton(tagList: List<Tag>) {
         if (tagList.isEmpty()) {
             PIconButton(
                 imageVector = Icons.Filled.Tag,
@@ -175,7 +176,7 @@ fun ChatInput(
     }
 
     @Composable
-    fun LocationButton(locationList: List<String>, ) {
+    fun LocationButton(locationList: List<String>) {
         if (locationList.isEmpty()) {
             PIconButton(
                 imageVector = Icons.Filled.AddLocation,
@@ -242,20 +243,20 @@ fun ChatInput(
                         .focusRequester(focusRequester)
                         .fillMaxWidth()
                         .heightIn(max = 280.dp)
-                        .clickable {  },
+                        .clickable { },
                     keyboardOptions = keyboardOptions,
                     label = { Text(R.string.any_thoughts.str) },
                 )
 
-                if (uploadAttachments.isNotEmpty()) {
+                if (memoInputViewModel.uploadAttachments.isNotEmpty()) {
                     LazyRow(
                         modifier = Modifier
                             .height(80.dp)
                             .padding(start = 15.dp, end = 15.dp, bottom = 15.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
-                        items(uploadAttachments.toList(), { it.path }) { resource ->
+                        items(memoInputViewModel.uploadAttachments.toList(), { it.path }) { resource ->
                             InputImage(attachment = resource, true) { pat ->
-                                uploadAttachments.remove(uploadAttachments.firstOrNull { it.path == pat })
+                                memoInputViewModel.uploadAttachments.remove(memoInputViewModel.uploadAttachments.firstOrNull { it.path == pat })
                             }
                         }
                     }
@@ -275,7 +276,7 @@ fun ChatInput(
                         imageVector = Icons.Outlined.Image,
                         contentDescription = stringResource(R.string.add_image),
                     ) {
-                        pickImage.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                        pickMultipleMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
                     }
                     PIconButton(
                         imageVector = Icons.Outlined.PhotoCamera,

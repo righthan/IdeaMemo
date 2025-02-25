@@ -4,8 +4,8 @@ import android.content.ActivityNotFoundException
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
-import androidx.activity.result.contract.ActivityResultContracts.TakePicture
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -78,7 +78,6 @@ import com.ldlywt.note.ui.page.LocalMemosViewModel
 import com.ldlywt.note.ui.page.LocalTags
 import com.ldlywt.note.ui.page.router.LocalRootNavController
 import com.ldlywt.note.utils.handlePickFiles
-import com.ldlywt.note.utils.lunchMain
 import com.ldlywt.note.utils.str
 import com.moriafly.salt.ui.SaltTheme
 import dev.jeziellago.compose.markdowntext.MarkdownText
@@ -94,7 +93,7 @@ import java.util.Locale
 @Composable
 fun MemoInputPage(
     memoId: Long,
-    viewModel: MemoInputViewModel = hiltViewModel(),
+    memoInputViewModel: MemoInputViewModel = hiltViewModel(),
 ) {
     val noteState = LocalMemosState.current
     val focusRequester = remember { FocusRequester() }
@@ -115,20 +114,25 @@ fun MemoInputPage(
     val focusManager = LocalFocusManager.current
 
     fun uploadImage(uri: Uri) = coroutineScope.launch {
-        lunchMain {
-            handlePickFiles(setOf(uri)) {
-                viewModel.uploadAttachments.addAll(it)
-            }
+        handlePickFiles(setOf(uri)) {
+            memoInputViewModel.uploadAttachments.addAll(it)
         }
     }
 
-    val pickImage = rememberLauncherForActivityResult(PickVisualMedia()) { uri ->
-        uri?.let { uploadImage(it) }
-    }
-
-    val takePhoto = rememberLauncherForActivityResult(TakePicture()) { success ->
+    val takePhoto = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { success ->
         if (success) {
             photoImageUri?.let { uploadImage(it) }
+        }
+    }
+
+    // 创建一个 launcher，用于选择多张图片
+    val pickMultipleMedia = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickMultipleVisualMedia(3) // 最多选择 3 张图片
+    ) { uris ->
+        coroutineScope.launch {
+            handlePickFiles(uris.toSet()) {
+                memoInputViewModel.uploadAttachments.addAll(it)
+            }
         }
     }
 
@@ -138,7 +142,7 @@ fun MemoInputPage(
         memo?.note?.apply {
             this.content = text.text
             this.updateTime = System.currentTimeMillis()
-            this.attachments = viewModel.uploadAttachments
+            this.attachments = memoInputViewModel.uploadAttachments
             memosViewModel.insertOrUpdate(this)
         }
         navController.popBackStack()
@@ -202,7 +206,7 @@ fun MemoInputPage(
                     }
 
                     IconButton(onClick = {
-                        pickImage.launch(PickVisualMediaRequest(PickVisualMedia.ImageOnly))
+                        pickMultipleMedia.launch(PickVisualMediaRequest(PickVisualMedia.ImageOnly))
                     }) {
                         Icon(Icons.Outlined.Image, contentDescription = R.string.add_image.str, tint = SaltTheme.colors.text)
                     }
@@ -284,15 +288,15 @@ fun MemoInputPage(
                 }
             }
 
-            if (viewModel.uploadAttachments.isNotEmpty()) {
+            if (memoInputViewModel.uploadAttachments.isNotEmpty()) {
                 LazyRow(
                     modifier = Modifier
                         .height(80.dp)
                         .padding(start = 15.dp, end = 15.dp, bottom = 15.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    items(viewModel.uploadAttachments.toList(), { it.path }) { resource ->
+                    items(memoInputViewModel.uploadAttachments.toList(), { it.path }) { resource ->
                         InputImage(attachment = resource, isEditMode) {
-                            viewModel.deleteResource(it)
+                            memoInputViewModel.deleteResource(it)
                         }
                     }
                 }
@@ -304,7 +308,7 @@ fun MemoInputPage(
         when {
             memo != null -> {
                 memo.note.attachments.let { resourceList ->
-                    viewModel.uploadAttachments.addAll(
+                    memoInputViewModel.uploadAttachments.addAll(
                         resourceList
                     )
                 }

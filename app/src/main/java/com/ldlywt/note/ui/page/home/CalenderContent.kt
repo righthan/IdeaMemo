@@ -49,6 +49,7 @@ fun MonthHeader(daysOfWeek: List<DayOfWeek>) {
                 modifier = Modifier.weight(1f),
                 textAlign = TextAlign.Center,
                 fontSize = 12.sp,
+                lineHeight = 16.sp,
                 color = SaltTheme.colors.text,
                 text = dayOfWeek.displayText(),
                 fontWeight = FontWeight.Medium,
@@ -62,7 +63,7 @@ fun Day(day: CalendarDay, today: LocalDate, hasScheme: Boolean, isSelected: Bool
     val backgroundColor = if (day.date == today) {
         MaterialTheme.colorScheme.primaryContainer
     } else {
-        if (isSelected) SaltTheme.colors.highlight else Color.Transparent
+        if (isSelected) MaterialTheme.colorScheme.surfaceContainerHigh else Color.Transparent
     }
     Box(
         modifier = Modifier
