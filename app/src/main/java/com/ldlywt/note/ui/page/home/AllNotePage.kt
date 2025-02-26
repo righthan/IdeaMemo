@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.FilterList
+import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Tag
 import androidx.compose.material.icons.rounded.Edit
@@ -39,7 +40,6 @@ import androidx.navigation.NavHostController
 import com.ldlywt.note.R
 import com.ldlywt.note.component.NoteCard
 import com.ldlywt.note.component.RYScaffold
-
 import com.ldlywt.note.state.NoteState
 import com.ldlywt.note.ui.page.LocalMemosState
 import com.ldlywt.note.ui.page.LocalMemosViewModel
@@ -144,6 +144,19 @@ fun AllNotesPage(
 
 @Composable
 private fun toolbar(navController: NavHostController, filterBlock: () -> Unit) {
+    IconButton(
+        onClick = {
+            navController.navigate(route = Screen.LocationList) {
+                launchSingleTop = true
+            }
+        }
+    ) {
+        Icon(
+            contentDescription = R.string.location_info.str,
+            imageVector = Icons.Outlined.LocationOn,
+            tint = SaltTheme.colors.text
+        )
+    }
     IconButton(
         onClick = {
             navController.navigate(route = Screen.TagList) {

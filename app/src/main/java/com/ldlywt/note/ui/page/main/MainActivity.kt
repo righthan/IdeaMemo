@@ -23,8 +23,10 @@ import com.ldlywt.note.ui.page.LocalTags
 import com.ldlywt.note.ui.page.NoteViewModel
 import com.ldlywt.note.ui.page.router.App
 import com.ldlywt.note.utils.FirstTimeManager
+import com.ldlywt.note.utils.SharedPreferencesUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -52,14 +54,31 @@ class MainActivity : AppCompatActivity() {
 
         firstTimeManager.generateIntroduceNoteList()
 
+        lifecycleScope.launch {
+            handleAuthentication()
+        }
+    }
+
+    // 提取公共的 setContent 逻辑
+    private fun setupContent() {
         setContent {
             SettingsProvider {
                 App()
             }
         }
-
-        setObservers()
     }
+
+    private suspend fun handleAuthentication() {
+        val useSafe = SharedPreferencesUtils.useSafe.firstOrNull() ?: false
+        if (useSafe && appBioMetricManager.canAuthenticate()) {
+            setObservers {
+                setupContent()
+            }
+        } else {
+            setupContent()
+        }
+    }
+
 
     @Composable
     fun SettingsProvider(
@@ -79,12 +98,16 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun setObservers() {
+    private fun setObservers(showContent: (Boolean) -> Unit = {}) {
+
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.initAuth.collect { value ->
-                    if (value && viewModel.loading.value) {
-                        viewModel.showBiometricPrompt(this@MainActivity)
+                    if (value && viewModel.showBioMetric.value) {
+                        viewModel.showBiometricPrompt(this@MainActivity) { isSuccess ->
+                            // 验证完成后显示主界面
+                            showContent(isSuccess)
+                        }
                     }
                 }
             }

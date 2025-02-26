@@ -25,8 +25,8 @@ class MainViewModel @Inject constructor(
     private val _finishActivity = MutableStateFlow(false)
     val finishActivity: StateFlow<Boolean> = _finishActivity.asStateFlow()
 
-    private val _loading = MutableStateFlow(true)
-    val loading: StateFlow<Boolean> = _loading.asStateFlow()
+    private val _showBioMetric = MutableStateFlow(true)
+    val showBioMetric: StateFlow<Boolean> = _showBioMetric.asStateFlow()
 
 
     init {
@@ -34,16 +34,17 @@ class MainViewModel @Inject constructor(
             if (SharedPreferencesUtils.useSafe.first() && appBioMetricManager.canAuthenticate()) {
                 _initAuth.emit(true)
             } else {
-                _loading.emit(false)
+                _showBioMetric.emit(false)
             }
         }
     }
 
-    fun showBiometricPrompt(mainActivity: MainActivity) {
+    fun showBiometricPrompt(mainActivity: MainActivity, success: (Boolean) -> Unit) {
         appBioMetricManager.initBiometricPrompt(activity = mainActivity, listener = object : BiometricAuthListener {
             override fun onBiometricAuthSuccess() {
                 viewModelScope.launch {
-                    _loading.emit(false)
+                    _showBioMetric.emit(false)
+                    success(true)
                 }
             }
 

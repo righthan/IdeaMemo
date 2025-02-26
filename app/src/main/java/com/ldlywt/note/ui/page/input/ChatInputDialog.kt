@@ -195,7 +195,7 @@ fun ChatInputDialog(
                         DropdownMenuItem(
                             text = { Text(txt) },
                             onClick = {
-                                val tagText = " @${txt} "
+                                val tagText = " @${txt}"
                                 text = text.copy(
                                     text.text.replaceRange(
                                         text.selection.min, text.selection.max, tagText

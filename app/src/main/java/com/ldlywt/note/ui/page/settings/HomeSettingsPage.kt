@@ -23,9 +23,7 @@ import androidx.compose.material.icons.outlined.Fingerprint
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Label
 import androidx.compose.material.icons.outlined.LineStyle
-import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.Photo
-import androidx.compose.material.icons.outlined.Tag
 import androidx.compose.material.icons.outlined.TipsAndUpdates
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -242,21 +240,7 @@ fun SettingsPreferenceScreen(navController: NavHostController) {
                         text = R.string.local_data_manager.str,
                         iconPainter = rememberVectorPainter(ImageVector.vectorResource(R.drawable.ic_database))
                     )
-                    Item(
-                        onClick = {
-                            navController.navigate(Screen.LocationList)
-                        },
-                        text = R.string.location_info.str,
-                        iconPainter = rememberVectorPainter(Icons.Outlined.LocationOn)
-                    )
 
-                    Item(
-                        onClick = {
-                            navController.navigate(Screen.TagList)
-                        },
-                        text = R.string.tag_List.str,
-                        iconPainter = rememberVectorPainter(Icons.Outlined.Tag)
-                    )
                     settingList.forEachIndexed { index, it ->
                         Item(
                             onClick = {
