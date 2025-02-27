@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.FileUpload
 import androidx.compose.material.icons.outlined.Javascript
 import androidx.compose.material.icons.outlined.PrivacyTip
 import androidx.compose.material.icons.outlined.Restore
@@ -184,11 +185,22 @@ fun DataManagerPage(
         }
     }
 
+    val restoreEncryptFromSdLauncher = rememberLauncherForActivityResult(RestoreNotesContract) { uri ->
+        if (uri == null) return@rememberLauncherForActivityResult
+        lunchMain {
+            isLoading = true
+            BackUp.restoreFromEncryptedZip(App.instance, uri, true)
+            isLoading = false
+            isShowRestartDialog = true
+        }
+    }
+
+
     val restoreFromSdLauncher = rememberLauncherForActivityResult(RestoreNotesContract) { uri ->
         if (uri == null) return@rememberLauncherForActivityResult
         lunchMain {
             isLoading = true
-            BackUp.restoreFromEncryptedZip(App.instance, uri)
+            BackUp.restoreFromSd(uri)
             isLoading = false
             isShowRestartDialog = true
         }
@@ -209,7 +221,7 @@ fun DataManagerPage(
             encryptedExportLauncher.launch(backUpFileName)
         },
         SettingsBean(R.string.data_restore, Icons.Outlined.Restore) {
-            restoreFromSdLauncher.launch(null)
+            restoreEncryptFromSdLauncher.launch(null)
         },
         SettingsBean(R.string.json_export, Icons.Outlined.Javascript) {
             exportNotesJsonLauncher.launch(null)
@@ -218,7 +230,10 @@ fun DataManagerPage(
             exportTxtLauncher.launch(null)
         },
         SettingsBean(R.string.export_data, Icons.Outlined.SaveAlt) {
-            exportLauncher.launch("IdeaMemo.zip")
+            exportLauncher.launch("IdeaMemoNoEncrypt.zip")
+        },
+        SettingsBean(R.string.export_restore_no_encr, Icons.Outlined.FileUpload) {
+            restoreFromSdLauncher.launch(null)
         },
     )
 
@@ -338,7 +353,7 @@ fun DataManagerPage(
             val resultPath = viewModel.downloadFileByPath(davData)
             if (!resultPath.isNullOrEmpty()) {
                 val uri = FileProvider.getUriForFile(context, "com.ldlywt.note.provider", File(resultPath))
-                BackUp.restoreFromEncryptedZip(App.instance, uri)
+                BackUp.restoreFromEncryptedZip(App.instance, uri, true)
                 isLoading = false
                 isShowRestartDialog = true
             }

@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.ElevatedAssistChip
@@ -25,10 +26,12 @@ import androidx.navigation.NavHostController
 import com.ldlywt.note.R
 import com.ldlywt.note.ui.page.LocalMemosViewModel
 import com.ldlywt.note.ui.page.NoteViewModel
+import com.ldlywt.note.ui.page.home.clickable
 import com.ldlywt.note.ui.page.router.Screen
 import com.moriafly.salt.ui.SaltTheme
 import com.moriafly.salt.ui.TitleBar
 import com.moriafly.salt.ui.UnstableSaltApi
+
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class, UnstableSaltApi::class)
 @Composable
@@ -49,28 +52,43 @@ fun LocationListPage(navHostController: NavHostController) {
             text = stringResource(R.string.location_info)
         )
 
-        FlowRow(modifier = Modifier
-            .fillMaxWidth(1f)
-            .padding(start = 12.dp, end = 12.dp), content = {
-            repeat(locationInfoList.size) { index ->
-                ElevatedAssistChip(
-                    modifier = Modifier
-                        .padding(horizontal = 4.dp),
-                    onClick = {
-                        navHostController.navigate(Screen.LocationDetail(locationInfoList[index]))
-                    },
-                    label = {
-                        Text(locationInfoList[index])
-                    },
-                    leadingIcon = {
-                        Icon(
-                            Icons.Filled.LocationOn,
-                            contentDescription = "Localized description",
-                            Modifier.size(AssistChipDefaults.IconSize)
-                        )
-                    }
-                )
+        FlowRow(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 12.dp, end = 12.dp),
+            content = {
+                repeat(locationInfoList.size) { index ->
+                    ElevatedAssistChip(
+                        onClick = {
+                            navHostController.navigate(Screen.LocationDetail(locationInfoList[index]))
+
+                        },
+                        modifier = Modifier.padding(horizontal = 4.dp),
+                        label = {
+                            Text(locationInfoList[index])
+                        },
+                        leadingIcon = {
+                            Icon(
+                                Icons.Filled.LocationOn,
+                                contentDescription = "Localized description",
+                                Modifier.size(AssistChipDefaults.IconSize)
+                            )
+                        },
+                        trailingIcon = {
+
+                            Icon(
+                                Icons.Filled.Close,
+                                contentDescription = "Localized description",
+                                Modifier
+                                    .size(AssistChipDefaults.IconSize)
+                                    .clickable {
+                                        noteViewModel.clearLocationInfo(locationInfoList[index])
+                                    }
+                            )
+                        }
+                    )
+                }
             }
-        })
+        )
     }
 }

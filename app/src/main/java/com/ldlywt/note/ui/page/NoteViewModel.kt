@@ -132,6 +132,12 @@ class NoteViewModel @Inject constructor(private val tagNoteRepo: TagNoteRepo) : 
 
     fun getNotesByLocationInfo(targetInfo: String): Flow<List<NoteShowBean>> = tagNoteRepo.getNotesByLocationInfo(targetInfo)
 
+    fun clearLocationInfo(locationInfo: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            tagNoteRepo.clearLocationInfo(locationInfo)
+        }
+    }
+
 }
 
 val LocalMemosViewModel = compositionLocalOf<NoteViewModel> { error("Not Found") }

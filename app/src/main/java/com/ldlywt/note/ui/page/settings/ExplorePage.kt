@@ -9,13 +9,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -28,15 +25,14 @@ import com.ldlywt.note.component.EmptyComponent
 import com.ldlywt.note.component.ImageCard
 import com.ldlywt.note.component.locationAndTimeText
 import com.ldlywt.note.component.showLocationInfoContent
+import com.ldlywt.note.ui.page.LocalMemosState
 import com.ldlywt.note.ui.page.router.Screen
 import com.ldlywt.note.utils.orFalse
 import com.ldlywt.note.utils.toTime
-import com.ldlywt.note.ui.page.LocalMemosState
 import com.moriafly.salt.ui.SaltTheme
 import com.moriafly.salt.ui.TitleBar
 import com.moriafly.salt.ui.UnstableSaltApi
 import dev.jeziellago.compose.markdowntext.MarkdownText
-import java.util.Random
 
 
 @OptIn(ExperimentalMaterial3Api::class, UnstableSaltApi::class)
@@ -101,9 +97,7 @@ fun ExploreList(
                 }
             }
         ) {
-            ExploreMemoCard(note, index, navHostController, onItemClick = {
-
-            })
+            ExploreMemoCard(note, navHostController)
         }
     }
 }
@@ -111,26 +105,16 @@ fun ExploreList(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ExploreMemoCard(
-    note: Note, page: Int, navHostController: NavHostController, onItemClick: (index: Int) -> Unit
+    note: Note, navHostController: NavHostController
 ) {
-
-    val rnd = Random()
-    val color = android.graphics.Color.argb(60, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256))
 
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(color = Color(color))
+            .background(color = SaltTheme.colors.subBackground)
             .padding(16.dp)
     ) {
-        Spacer(modifier = Modifier.weight(1f)) // 顶部Spacer
-        note.noteTitle?.let {
-            Text(
-                text = it,
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.primary,
-            )
-        }
+        Spacer(modifier = Modifier.weight(1f))
         MarkdownText(markdown = note.content, style = SaltTheme.textStyles.paragraph.copy(fontSize = 15.sp, lineHeight = 24.sp), onTagClick = {
             navHostController.navigate(Screen.TagDetail(it))
         })

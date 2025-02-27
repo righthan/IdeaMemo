@@ -71,6 +71,7 @@
     <string name="take_photo">take photo</string>
     <string name="submit">Submit</string>
     <string name="export_data">Data export (without encryption)</string>
+    <string name="export_restore_no_encr">Data restore (without encryption)</string>
     <string name="update_time_desc">Update Time DESC</string>
     <string name="update_time_asc">Update Time ASC</string>
     <string name="create_time_desc">Create Time DESC</string>

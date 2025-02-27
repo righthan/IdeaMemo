@@ -72,6 +72,7 @@
     <string name="take_photo">take photo</string>
     <string name="submit">提交</string>
     <string name="export_data">数据导出(不加密)</string>
+    <string name="export_restore_no_encr">数据还原(不加密)</string>
     <string name="update_time_desc">更新时间倒叙</string>
     <string name="update_time_asc">更新时间正叙</string>
     <string name="create_time_desc">创建时间倒叙</string>

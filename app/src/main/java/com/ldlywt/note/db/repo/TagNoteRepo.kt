@@ -126,4 +126,8 @@ class TagNoteRepo(
 
     fun getNotesByLocationInfo(targetInfo: String): Flow<List<NoteShowBean>> = noteDao.getNotesByLocationInfo(targetInfo)
 
+    fun clearLocationInfo(locationInfo: String) {
+        noteDao.clearLocationInfo(locationInfo)
+    }
+
 }

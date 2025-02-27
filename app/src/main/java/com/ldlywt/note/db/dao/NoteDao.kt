@@ -52,5 +52,8 @@ interface NoteDao {
     @Query("SELECT * FROM Note WHERE strftime('%Y-%m', create_time/1000) = :yearMonth")
     fun queryAllNotesByYearMonth(yearMonth: String): Flow<List<Note>>
 
+    @Query("UPDATE Note SET location_info = NULL WHERE location_info = :locationInfo")
+    fun clearLocationInfo(locationInfo: String)
+
 }
 
