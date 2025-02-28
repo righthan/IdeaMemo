@@ -46,7 +46,7 @@ sealed class Screen {
     object Gallery : Screen()
 
     @Serializable
-    data class PictureDisplay(val path: String) : Screen()
+    data class PictureDisplay(val pathList: List<String>, val curIndex: Int) : Screen()
 
     @Serializable
     object MoreInfo : Screen()

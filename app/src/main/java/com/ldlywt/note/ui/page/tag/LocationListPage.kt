@@ -19,6 +19,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -28,9 +31,11 @@ import com.ldlywt.note.ui.page.LocalMemosViewModel
 import com.ldlywt.note.ui.page.NoteViewModel
 import com.ldlywt.note.ui.page.home.clickable
 import com.ldlywt.note.ui.page.router.Screen
+import com.ldlywt.note.utils.str
 import com.moriafly.salt.ui.SaltTheme
 import com.moriafly.salt.ui.TitleBar
 import com.moriafly.salt.ui.UnstableSaltApi
+import com.moriafly.salt.ui.dialog.YesNoDialog
 
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class, UnstableSaltApi::class)
@@ -38,6 +43,8 @@ import com.moriafly.salt.ui.UnstableSaltApi
 fun LocationListPage(navHostController: NavHostController) {
     val noteViewModel: NoteViewModel = LocalMemosViewModel.current
     val locationInfoList by noteViewModel.getAllLocationInfo().collectAsState(initial = emptyList())
+    var showDialog by remember { mutableStateOf(false) }
+    var selectedLocationInfo by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
@@ -61,7 +68,6 @@ fun LocationListPage(navHostController: NavHostController) {
                     ElevatedAssistChip(
                         onClick = {
                             navHostController.navigate(Screen.LocationDetail(locationInfoList[index]))
-
                         },
                         modifier = Modifier.padding(horizontal = 4.dp),
                         label = {
@@ -75,14 +81,14 @@ fun LocationListPage(navHostController: NavHostController) {
                             )
                         },
                         trailingIcon = {
-
                             Icon(
                                 Icons.Filled.Close,
                                 contentDescription = "Localized description",
                                 Modifier
                                     .size(AssistChipDefaults.IconSize)
                                     .clickable {
-                                        noteViewModel.clearLocationInfo(locationInfoList[index])
+                                        selectedLocationInfo = locationInfoList[index]
+                                        showDialog = true
                                     }
                             )
                         }
@@ -90,5 +96,19 @@ fun LocationListPage(navHostController: NavHostController) {
                 }
             }
         )
+
+        if (showDialog) {
+            YesNoDialog(
+                title = R.string.warm_reminder.str,
+                content = stringResource(R.string.delete_location, selectedLocationInfo),
+                onConfirm = {
+                    noteViewModel.clearLocationInfo(selectedLocationInfo)
+                    showDialog = false
+                },
+                onDismissRequest = {
+                    showDialog = false
+                }
+            )
+        }
     }
 }

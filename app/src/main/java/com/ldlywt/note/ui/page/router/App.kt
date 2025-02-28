@@ -18,11 +18,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.ldlywt.note.ui.page.PictureDisplayPage
-import com.ldlywt.note.ui.page.search.SearchPage
 import com.ldlywt.note.ui.page.data.DataCloudConfigPage
 import com.ldlywt.note.ui.page.data.DataManagerPage
 import com.ldlywt.note.ui.page.input.MemoInputPage
 import com.ldlywt.note.ui.page.main.MainScreen
+import com.ldlywt.note.ui.page.search.SearchPage
 import com.ldlywt.note.ui.page.settings.ExplorePage
 import com.ldlywt.note.ui.page.settings.GalleryPage
 import com.ldlywt.note.ui.page.settings.MoreInfoPage
@@ -150,7 +150,7 @@ fun NavHostContainer(
 
         composable<Screen.PictureDisplay> { navBackStackEntry ->
             val args = navBackStackEntry.toRoute<Screen.PictureDisplay>()
-            PictureDisplayPage(path = args.path, onBack = { navController.popBackStack() })
+            PictureDisplayPage(pathList = args.pathList, index = args.curIndex, onBack = { navController.popBackStack() })
         }
 
         composable<Screen.InputDetail> { navBackStackEntry ->
