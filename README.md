@@ -10,9 +10,12 @@
 ## 🖌️ Screenshots
 
 <div>
-    <img src="https://s21.ax1x.com/2025/02/15/pEK8gEQ.png" width="32.2%" alt="" />
-    <img src="https://s21.ax1x.com/2025/02/15/pEK86Hg.png" width="32.2%" alt="" />
-    <img src="https://s21.ax1x.com/2025/02/15/pEK8yDS.png" width="32.2%" alt="" />
+    <img src="https://s21.ax1x.com/2025/03/01/pE8BjUJ.png" width="45%" alt="" />
+    <img src="https://s21.ax1x.com/2025/03/01/pE8BXE4.png" width="45%" alt="" />
+</div>
+<div>
+    <img src="https://s21.ax1x.com/2025/03/01/pE8BLbF.png" width="45%" alt="" />
+    <img src="https://s21.ax1x.com/2025/03/01/pE8BqDU.png" width="45%" alt="" />
 </div>
 
 ## ✨ Features
