@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -16,6 +17,7 @@ import androidx.compose.material.icons.outlined.Code
 import androidx.compose.material.icons.outlined.Contactless
 import androidx.compose.material.icons.outlined.Feedback
 import androidx.compose.material.icons.outlined.LocalCafe
+import androidx.compose.material.icons.outlined.People
 import androidx.compose.material.icons.outlined.PrivacyTip
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.outlined.Star
@@ -48,6 +50,7 @@ import com.ldlywt.note.utils.openUrl
 import com.ldlywt.note.utils.shareApp
 import com.ldlywt.note.utils.str
 import com.moriafly.salt.ui.Item
+import com.moriafly.salt.ui.ItemArrowType
 import com.moriafly.salt.ui.RoundedColumn
 import com.moriafly.salt.ui.SaltTheme
 import com.moriafly.salt.ui.Text
@@ -62,6 +65,32 @@ fun ContactDialog(block: () -> Unit) {
         onDismissRequest = { },
         title = { androidx.compose.material3.Text(stringResource(R.string.contact), color = SaltTheme.colors.text) },
         text = { AboutComposeScreen() },
+        confirmButton = {
+            Button(onClick = {
+                block()
+            }) {
+                Text("OK", color = Color.White)
+            }
+        }
+    )
+}
+
+@Composable
+fun DonateDialog(block: () -> Unit) {
+    val list = arrayListOf("尧孟张", "+（李刚)", "Tomo Ebizuka", "Corcube")
+    AlertDialog(
+        containerColor = SaltTheme.colors.background,
+        onDismissRequest = { },
+        title = { androidx.compose.material3.Text(stringResource(R.string.thanks), color = SaltTheme.colors.text) },
+        text = {
+            LazyColumn {
+                list.forEach {
+                    item {
+                        Item(text = it, onClick = {}, arrowType = ItemArrowType.None)
+                    }
+                }
+            }
+        },
         confirmButton = {
             Button(onClick = {
                 block()
@@ -162,6 +191,19 @@ fun MoreInfoPage(
                     iconPainter = rememberVectorPainter(it.imageVector),
                 )
             }
+            var showDonateDialog by remember { mutableStateOf(false) }
+            if (showDonateDialog) {
+                DonateDialog {
+                    showDonateDialog = false
+                }
+            }
+            Item(
+                onClick = {
+                    showDonateDialog = true
+                },
+                text = R.string.donate_list.str,
+                iconPainter = rememberVectorPainter(Icons.Outlined.People),
+            )
         }
         RoundedColumn {
             var yesNoDialog by remember { mutableStateOf(false) }

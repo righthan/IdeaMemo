@@ -35,8 +35,7 @@ class DataManagerViewModel @Inject constructor(private val tagNoteRepo: TagNoteR
     }
 
 
-    val isLogin = SharedPreferencesUtils.davLoginSuccess.asLiveData().value?:false
-
+    val isLogin = SharedPreferencesUtils.davLoginSuccess.asLiveData().value ?: false
 
 
     suspend fun exportToWebdav(context: Context): String = withIO {

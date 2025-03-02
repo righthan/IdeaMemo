@@ -102,4 +102,6 @@
     <string name="github">开源地址</string>
     <string name="card_note_maxline">首页卡片最大行数</string>
     <string name="delete_location">确定要删除 %1$s 位置信息？</string>
+    <string name="donate_list">捐赠名单</string>
+    <string name="thanks">鸣谢</string>
 </resources>

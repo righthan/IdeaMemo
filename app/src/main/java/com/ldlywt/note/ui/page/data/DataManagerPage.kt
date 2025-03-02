@@ -101,7 +101,7 @@ fun DataManagerPage(
     var webInputDialog: Boolean by remember { mutableStateOf(false) }
     val autoBackSwitchState = SharedPreferencesUtils.localAutoBackup.collectAsState(false)
     val jianGuoCloudSwitchState = SharedPreferencesUtils.davLoginSuccess.collectAsState(false)
-    val isLogin =viewModel.isLogin
+    val isLogin = viewModel.isLogin
 
     fun navToWebdavConfigPage() {
         navController.navigate(Screen.DataCloudConfig)
@@ -196,7 +196,7 @@ fun DataManagerPage(
     }
 
 
-    val restoreFromSdLauncher = rememberLauncherForActivityResult(RestoreNotesContract) { uri ->
+    val restoreNoEncryLauncher = rememberLauncherForActivityResult(RestoreNotesContract) { uri ->
         if (uri == null) return@rememberLauncherForActivityResult
         lunchMain {
             isLoading = true
@@ -230,10 +230,10 @@ fun DataManagerPage(
             exportTxtLauncher.launch(null)
         },
         SettingsBean(R.string.export_data, Icons.Outlined.SaveAlt) {
-            exportLauncher.launch("IdeaMemoNoEncrypt.zip")
+            exportLauncher.launch("IdeaMNoEncrypt.zip")
         },
         SettingsBean(R.string.export_restore_no_encr, Icons.Outlined.FileUpload) {
-            restoreFromSdLauncher.launch(null)
+            restoreNoEncryLauncher.launch(null)
         },
     )
 
@@ -302,13 +302,13 @@ fun DataManagerPage(
                 text = R.string.webdav_auth.str,
                 state = jianGuoCloudSwitchState.value,
                 onChange = {
-                    if(jianGuoCloudSwitchState.value) {
+                    if (jianGuoCloudSwitchState.value) {
                         scope.launch {
                             SharedPreferencesUtils.clearDavConfig()
                         }
-                    }else {
-                            webInputDialog = true
-                        }
+                    } else {
+                        webInputDialog = true
+                    }
                 }
             )
             if (jianGuoCloudSwitchState.value) {
@@ -362,9 +362,9 @@ fun DataManagerPage(
     LoadingComponent(isLoading)
     ConfirmDialog(isShowRestartDialog, title = R.string.restart.str, content = R.string.app_restored.str,
         onDismissRequest = {
-            isShowRestartDialog=false
+            isShowRestartDialog = false
         }, onConfirmRequest = {
-            isShowRestartDialog=false
+            isShowRestartDialog = false
             val packageManager = context.packageManager
             val intent = packageManager.getLaunchIntentForPackage(context.packageName)
             val componentName = intent!!.component
@@ -447,22 +447,22 @@ fun AccountInputDialog(
         ItemTitle(text = R.string.webdav_config.str)
 
         val serverUrl = SharedPreferencesUtils.davServerUrl.collectAsState("")
-        val username =SharedPreferencesUtils.davUserName.collectAsState(null)
-        val password =SharedPreferencesUtils.davPassword.collectAsState(null)
+        val username = SharedPreferencesUtils.davUserName.collectAsState(null)
+        val password = SharedPreferencesUtils.davPassword.collectAsState(null)
         val dataManagerViewMode: DataManagerViewModel = hiltViewModel()
 //        val focusRequester = remember { FocusRequester() }
         ItemEdit(
-            text = serverUrl.value?:"",
+            text = serverUrl.value ?: "",
             onChange = {
                 scope.launch {
-                   SharedPreferencesUtils.updateDavServerUrl(it)
+                    SharedPreferencesUtils.updateDavServerUrl(it)
                 }
             },
             hint = stringResource(R.string.server_url)
         )
 
         ItemEdit(
-            text = username.value?:"" ,
+            text = username.value ?: "",
             onChange = {
                 scope.launch {
                     SharedPreferencesUtils.updateDavUserName(it)

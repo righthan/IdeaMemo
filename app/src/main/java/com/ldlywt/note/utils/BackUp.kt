@@ -166,6 +166,10 @@ object BackUp {
     }
 
     suspend fun restoreFromSd(uri: Uri) = withContext(Dispatchers.IO) {
+        // https://stackoverflow.com/questions/77683434/the-getnextentry-method-of-zipinputstream-throws-a-zipexception-invalid-zip-ent
+        if (Build.VERSION.SDK_INT >= 34) {
+            ZipPathValidator.clearCallback()
+        }
         val context = App.instance
         App.instance.contentResolver.openInputStream(uri)?.use { stream ->
             val destFile = File(context.cacheDir, "restore")
