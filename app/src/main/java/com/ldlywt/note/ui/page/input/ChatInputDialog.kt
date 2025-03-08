@@ -254,10 +254,10 @@ fun ChatInputDialog(
                             .height(80.dp)
                             .padding(start = 15.dp, end = 15.dp, bottom = 15.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
-                        items(memoInputViewModel.uploadAttachments.toList(), { it.path }) { resource ->
-                            InputImage(attachment = resource, true) { pat ->
+                        items(memoInputViewModel.uploadAttachments.toList()) { resource ->
+                            InputImage(attachment = resource, true, delete = { pat ->
                                 memoInputViewModel.uploadAttachments.remove(memoInputViewModel.uploadAttachments.firstOrNull { it.path == pat })
-                            }
+                            })
                         }
                     }
                 }

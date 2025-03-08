@@ -150,7 +150,7 @@ fun NavHostContainer(
 
         composable<Screen.PictureDisplay> { navBackStackEntry ->
             val args = navBackStackEntry.toRoute<Screen.PictureDisplay>()
-            PictureDisplayPage(pathList = args.pathList, index = args.curIndex, onBack = { navController.popBackStack() })
+            PictureDisplayPage(pathList = args.pathList, index = args.curIndex, navController = navController)
         }
 
         composable<Screen.InputDetail> { navBackStackEntry ->

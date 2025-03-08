@@ -1,6 +1,5 @@
 package com.ldlywt.note.ui.page
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.ldlywt.note.utils.BlurTransformation
@@ -27,13 +27,9 @@ import com.ldlywt.note.utils.BlurTransformation
 @Composable
 fun PictureDisplayPage(
     pathList: List<String>, index: Int,
-    onBack: (() -> Unit)? = null
+    navController: NavHostController
 ) {
     val pagerState = rememberPagerState(pageCount = { pathList.size }, initialPage = index) // 定义10个页面
-
-    BackHandler {
-        onBack?.invoke()
-    }
 
     Box {
         HorizontalPager(state = pagerState) { page ->
@@ -46,7 +42,7 @@ fun PictureDisplayPage(
                 )
             }
         }
-        IconButton(onClick = { onBack?.invoke() }, modifier = Modifier.padding(start = 12.dp, top = 24.dp, end = 0.dp, bottom = 0.dp)) {
+        IconButton(onClick = { navController.popBackStack() }, modifier = Modifier.padding(start = 12.dp, top = 24.dp, end = 0.dp, bottom = 0.dp)) {
             Icon(
                 imageVector = Icons.Filled.ArrowBack,
                 contentDescription = null,

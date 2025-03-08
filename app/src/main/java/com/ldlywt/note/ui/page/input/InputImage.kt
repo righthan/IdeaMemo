@@ -33,7 +33,8 @@ import kotlinx.coroutines.launch
 fun InputImage(
     attachment: Attachment,
     isEdit: Boolean,
-    delete: (path: String) -> Unit
+    delete: (path: String) -> Unit,
+    onclick: () -> Unit = {}
 ) {
     var menuExpanded by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
@@ -48,7 +49,11 @@ fun InputImage(
                 .zIndex(1f)
                 .clip(RoundedCornerShape(2.dp))
                 .clickable {
-                    menuExpanded = true
+                    if (isEdit) {
+                        menuExpanded = true
+                    } else {
+                        onclick()
+                    }
                 },
             contentScale = ContentScale.Crop
         )

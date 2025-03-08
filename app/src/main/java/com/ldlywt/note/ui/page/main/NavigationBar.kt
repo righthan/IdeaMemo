@@ -19,7 +19,6 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -137,7 +136,7 @@ fun AdaptiveNavigationBar(
 ) {
     if (isWideScreen) {
         // 使用 NavigationRail 适配宽屏
-        NavigationRail(modifier) {
+        NavigationRail(modifier, containerColor = SaltTheme.colors.subBackground) {
             destinations.forEachIndexed { index, destination ->
                 val selected = destination.route == currentDestination
                 NavigationRailItem(

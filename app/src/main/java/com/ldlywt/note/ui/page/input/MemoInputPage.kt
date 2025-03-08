@@ -291,13 +291,13 @@ fun MemoInputPage(
             if (memoInputViewModel.uploadAttachments.isNotEmpty()) {
                 LazyRow(
                     modifier = Modifier
-                        .height(80.dp)
+                        .height(120.dp)
                         .padding(start = 15.dp, end = 15.dp, bottom = 15.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
                     items(memoInputViewModel.uploadAttachments.toList(), { it.path }) { resource ->
-                        InputImage(attachment = resource, isEditMode) {
+                        InputImage(attachment = resource, isEditMode, delete = {
                             memoInputViewModel.deleteResource(it)
-                        }
+                        })
                     }
                 }
             }
