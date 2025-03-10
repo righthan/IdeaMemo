@@ -1,14 +1,11 @@
 package com.ldlywt.note.component
 
-import androidx.compose.foundation.background
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -19,14 +16,18 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import com.ldlywt.note.R
 import com.ldlywt.note.bean.NoteShowBean
-import com.ldlywt.note.ui.page.router.Screen
-import com.ldlywt.note.utils.copy
-import com.ldlywt.note.utils.str
 import com.ldlywt.note.ui.page.LocalMemosViewModel
+import com.ldlywt.note.ui.page.router.Screen
+import com.ldlywt.note.utils.BackUp
+import com.ldlywt.note.utils.ExportMarkDownContract
+import com.ldlywt.note.utils.copy
+import com.ldlywt.note.utils.lunchIo
+import com.ldlywt.note.utils.str
+import com.ldlywt.note.utils.toast
+import com.ldlywt.note.utils.withIO
 import com.moriafly.salt.ui.SaltTheme
 import kotlinx.coroutines.launch
 
@@ -43,6 +44,15 @@ fun ActionBottomSheet(
     val bottomSheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = skipPartiallyExpanded
     )
+    val fileName = if (noteShowBean.note.content.length > 4) noteShowBean.note.content.take(4) else noteShowBean.note.content
+
+    val exportMarkDownLauncher = rememberLauncherForActivityResult(ExportMarkDownContract(fileName)) { uri ->
+        if (uri == null) return@rememberLauncherForActivityResult
+        lunchIo {
+            BackUp.exportMarkDownFile(list = arrayListOf(noteShowBean), uri)
+            toast(R.string.excute_success.str)
+        }
+    }
 
     // Sheet content
     if (show) {
@@ -72,16 +82,6 @@ fun ActionBottomSheet(
 
                     item {
                         TextButton(onClick = {
-//                            EditorTextActivity.startActivity(context, noteShowBean)
-                            navHostController.navigate(route = Screen.InputDetail(noteShowBean.note.noteId))
-                            onDismissRequest()
-                        }, modifier = Modifier.fillMaxWidth()) {
-                            Text(text = R.string.edit.str, style = SaltTheme.textStyles.paragraph)
-                        }
-                    }
-
-                    item {
-                        TextButton(onClick = {
                             navHostController.navigate(Screen.Share(noteShowBean.note.noteId))
                             onDismissRequest()
                         }, modifier = Modifier.fillMaxWidth()) {
@@ -97,6 +97,18 @@ fun ActionBottomSheet(
                             }
                         }, modifier = Modifier.fillMaxWidth()) {
                             Text(text = R.string.delete.str, style = SaltTheme.textStyles.paragraph)
+                        }
+                    }
+                    item {
+                        TextButton(onClick = {
+                            scope.launch {
+                                withIO {
+                                    exportMarkDownLauncher.launch(null)
+                                }
+                                onDismissRequest()
+                            }
+                        }, modifier = Modifier.fillMaxWidth()) {
+                            Text(text = R.string.mk_export.str, style = SaltTheme.textStyles.paragraph)
                         }
                     }
                 }

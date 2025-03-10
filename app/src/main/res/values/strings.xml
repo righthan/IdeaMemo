@@ -29,6 +29,7 @@
     <string name="failed">Failed, thanks for your support</string>
     <string name="json_export">Export Json</string>
     <string name="txt_export">Export Txt</string>
+    <string name="mk_export">Export MarkDown</string>
     <string name="webdav_backup">Backup</string>
     <string name="webdav_restore">Restore</string>
     <string name="tag_fix">Fix Tag</string>

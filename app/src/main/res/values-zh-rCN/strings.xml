@@ -30,6 +30,7 @@
     <string name="failed">失败啦，谢谢支持</string>
     <string name="json_export">Json 导出</string>
     <string name="txt_export">Txt 导出</string>
+    <string name="mk_export">MarkDown 导出</string>
     <string name="webdav_backup">备份</string>
     <string name="webdav_restore">还原</string>
     <string name="tag_fix">标签修正</string>

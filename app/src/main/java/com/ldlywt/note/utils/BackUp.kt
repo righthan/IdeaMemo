@@ -205,12 +205,25 @@ object BackUp {
             val ow = OutputStreamWriter(stream)
             val writer = BufferedWriter(ow)
             list.forEachIndexed { _, noteShowBean ->
-                noteShowBean.note.noteTitle?.let {
-                    writer.append("${it}\n")
-                }
                 writer.append("${noteShowBean.note.createTime.toTime()}\n")
-                noteShowBean.note.locationInfo?.let {
-                    writer.append(it.plus("  ".plus(noteShowBean.note.weatherInfo).plus("\n")))
+                if (!noteShowBean.note.locationInfo.isNullOrEmpty()) {
+                    writer.append(noteShowBean.note.locationInfo.plus("\n"))
+                }
+                writer.append(noteShowBean.note.content.plus(""))
+                writer.append("\n\n")
+            }
+            writer.close()
+        }
+    }
+
+    fun exportMarkDownFile(list: List<NoteShowBean>, uri: Uri) {
+        (App.instance.contentResolver.openOutputStream(uri) as? FileOutputStream)?.use { stream ->
+            val ow = OutputStreamWriter(stream)
+            val writer = BufferedWriter(ow)
+            list.forEachIndexed { _, noteShowBean ->
+                writer.append("### ${noteShowBean.note.createTime.toTime()}\n")
+                if (!noteShowBean.note.locationInfo.isNullOrEmpty()) {
+                    writer.append(noteShowBean.note.locationInfo.plus("\n"))
                 }
                 writer.append(noteShowBean.note.content.plus(""))
                 writer.append("\n\n")

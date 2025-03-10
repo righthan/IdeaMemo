@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.FileUpload
+import androidx.compose.material.icons.outlined.FormatColorText
 import androidx.compose.material.icons.outlined.Javascript
 import androidx.compose.material.icons.outlined.PrivacyTip
 import androidx.compose.material.icons.outlined.Restore
@@ -58,6 +59,7 @@ import com.ldlywt.note.ui.page.router.Screen
 import com.ldlywt.note.ui.page.settings.SettingsBean
 import com.ldlywt.note.utils.BackUp
 import com.ldlywt.note.utils.ChoseFolderContract
+import com.ldlywt.note.utils.ExportMarkDownContract
 import com.ldlywt.note.utils.ExportNotesJsonContract
 import com.ldlywt.note.utils.ExportTextContract
 import com.ldlywt.note.utils.RestoreNotesContract
@@ -153,6 +155,14 @@ fun DataManagerPage(
         }
     }
 
+    val exportMarkDownLauncher = rememberLauncherForActivityResult(ExportMarkDownContract("IdeaMemo")) { uri ->
+        if (uri == null) return@rememberLauncherForActivityResult
+        lunchIo {
+            BackUp.exportMarkDownFile(list = noteState.notes, uri)
+            toast(R.string.excute_success.str)
+        }
+    }
+
     // Create an ActivityResultLauncher
     val exportLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.CreateDocument()
@@ -228,6 +238,9 @@ fun DataManagerPage(
         },
         SettingsBean(R.string.txt_export, Icons.Outlined.TextFields) {
             exportTxtLauncher.launch(null)
+        },
+        SettingsBean(R.string.mk_export, Icons.Outlined.FormatColorText) {
+            exportMarkDownLauncher.launch(null)
         },
         SettingsBean(R.string.export_data, Icons.Outlined.SaveAlt) {
             exportLauncher.launch("IdeaMNoEncrypt.zip")
