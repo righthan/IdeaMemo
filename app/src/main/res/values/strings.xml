@@ -27,6 +27,7 @@
     <string name="user_agree">User Agreement</string>
     <string name="privacy_policy">Privacy Policy</string>
     <string name="failed">Failed, thanks for your support</string>
+    <string name="export">Export</string>
     <string name="json_export">Export Json</string>
     <string name="txt_export">Export Txt</string>
     <string name="mk_export">Export MarkDown</string>

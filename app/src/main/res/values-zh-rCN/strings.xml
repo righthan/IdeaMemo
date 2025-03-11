@@ -28,6 +28,7 @@
     <string name="user_agree">用户协议</string>
     <string name="privacy_policy">隐私政策</string>
     <string name="failed">失败啦，谢谢支持</string>
+    <string name="export">导出</string>
     <string name="json_export">Json 导出</string>
     <string name="txt_export">Txt 导出</string>
     <string name="mk_export">MarkDown 导出</string>

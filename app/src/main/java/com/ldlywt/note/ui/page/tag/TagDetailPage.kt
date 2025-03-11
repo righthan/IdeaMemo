@@ -15,6 +15,7 @@ import androidx.navigation.NavHostController
 import com.ldlywt.note.component.NoteCard
 import com.ldlywt.note.component.NoteCardFrom
 import com.ldlywt.note.ui.page.LocalMemosViewModel
+import com.ldlywt.note.ui.page.router.debouncedPopBackStack
 import com.ldlywt.note.utils.SettingsPreferences
 import com.moriafly.salt.ui.SaltTheme
 import com.moriafly.salt.ui.TitleBar
@@ -37,7 +38,7 @@ fun TagDetailPage(tag: String, navController: NavHostController) {
 
         TitleBar(
             onBack = {
-                navController.popBackStack()
+                navController.debouncedPopBackStack()
             },
             text = tag
         )

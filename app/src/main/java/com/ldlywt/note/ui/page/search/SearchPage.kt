@@ -38,6 +38,7 @@ import androidx.navigation.NavHostController
 import com.ldlywt.note.R
 import com.ldlywt.note.component.NoteCard
 import com.ldlywt.note.component.NoteCardFrom
+import com.ldlywt.note.ui.page.router.debouncedPopBackStack
 import com.ldlywt.note.utils.SettingsPreferences
 import com.moriafly.salt.ui.SaltTheme
 import kotlinx.coroutines.delay
@@ -73,7 +74,7 @@ fun SearchPage(
                         Text(stringResource(id = R.string.search_hint))
                     },
                     leadingIcon = {
-                        IconButton(onClick = { navController.popBackStack() }) {
+                        IconButton(onClick = { navController.debouncedPopBackStack() }) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                                 contentDescription = stringResource(id = R.string.back)
@@ -101,7 +102,7 @@ fun SearchPage(
                 .align(Alignment.TopCenter)
                 .focusRequester(focusRequester),
             expanded = searchBarExpanded,
-            onExpandedChange = { if (!it) navController.popBackStack() },
+            onExpandedChange = { if (!it) navController.debouncedPopBackStack() },
         ) {
             LazyColumn(
                 Modifier

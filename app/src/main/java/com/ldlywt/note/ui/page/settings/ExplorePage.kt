@@ -27,6 +27,7 @@ import com.ldlywt.note.component.locationAndTimeText
 import com.ldlywt.note.component.showLocationInfoContent
 import com.ldlywt.note.ui.page.LocalMemosState
 import com.ldlywt.note.ui.page.router.Screen
+import com.ldlywt.note.ui.page.router.debouncedPopBackStack
 import com.ldlywt.note.utils.orFalse
 import com.ldlywt.note.utils.toTime
 import com.moriafly.salt.ui.SaltTheme
@@ -51,7 +52,7 @@ fun ExplorePage(
     ) {
         TitleBar(
             onBack = {
-                navHostController.popBackStack()
+                navHostController.debouncedPopBackStack()
             },
             text = stringResource(R.string.random_walk)
         )

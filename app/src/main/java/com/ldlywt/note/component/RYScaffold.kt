@@ -23,6 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.ldlywt.note.R
+import com.ldlywt.note.ui.page.router.debouncedPopBackStack
 import com.moriafly.salt.ui.SaltTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -45,7 +46,7 @@ fun RYScaffold(
                     title = { Text(text = title, style = SaltTheme.textStyles.main.copy(fontSize = 24.sp)) },
                     navigationIcon = {
                         if (navController != null) {
-                            IconButton(onClick = { navController.popBackStack() }) {
+                            IconButton(onClick = { navController.debouncedPopBackStack() }) {
                                 Icon(
                                     imageVector = Icons.Sharp.ArrowBackIosNew,
                                     contentDescription = stringResource(R.string.back),

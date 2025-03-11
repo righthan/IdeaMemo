@@ -108,7 +108,7 @@ fun ActionBottomSheet(
                                 onDismissRequest()
                             }
                         }, modifier = Modifier.fillMaxWidth()) {
-                            Text(text = R.string.mk_export.str, style = SaltTheme.textStyles.paragraph)
+                            Text(text = R.string.export.str, style = SaltTheme.textStyles.paragraph)
                         }
                     }
                 }

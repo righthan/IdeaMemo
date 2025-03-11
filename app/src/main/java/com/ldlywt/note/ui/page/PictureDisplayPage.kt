@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.ldlywt.note.ui.page.router.debouncedPopBackStack
 import com.ldlywt.note.utils.BlurTransformation
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -42,7 +43,7 @@ fun PictureDisplayPage(
                 )
             }
         }
-        IconButton(onClick = { navController.popBackStack() }, modifier = Modifier.padding(start = 12.dp, top = 24.dp, end = 0.dp, bottom = 0.dp)) {
+        IconButton(onClick = { navController.debouncedPopBackStack() }, modifier = Modifier.padding(start = 12.dp, top = 24.dp, end = 0.dp, bottom = 0.dp)) {
             Icon(
                 imageVector = Icons.Filled.ArrowBack,
                 contentDescription = null,

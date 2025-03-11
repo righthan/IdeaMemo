@@ -56,6 +56,7 @@ import com.ldlywt.note.component.LoadingComponent
 import com.ldlywt.note.component.RYDialog
 import com.ldlywt.note.ui.page.LocalMemosState
 import com.ldlywt.note.ui.page.router.Screen
+import com.ldlywt.note.ui.page.router.debouncedPopBackStack
 import com.ldlywt.note.ui.page.settings.SettingsBean
 import com.ldlywt.note.utils.BackUp
 import com.ldlywt.note.utils.ChoseFolderContract
@@ -260,7 +261,7 @@ fun DataManagerPage(
 
         TitleBar(
             onBack = {
-                navController.popBackStack()
+                navController.debouncedPopBackStack()
             },
             text = R.string.local_data_manager.str
         )

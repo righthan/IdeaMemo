@@ -77,6 +77,7 @@ import com.ldlywt.note.ui.page.LocalMemosState
 import com.ldlywt.note.ui.page.LocalMemosViewModel
 import com.ldlywt.note.ui.page.LocalTags
 import com.ldlywt.note.ui.page.router.LocalRootNavController
+import com.ldlywt.note.ui.page.router.debouncedPopBackStack
 import com.ldlywt.note.utils.handlePickFiles
 import com.ldlywt.note.utils.str
 import com.moriafly.salt.ui.SaltTheme
@@ -145,7 +146,7 @@ fun MemoInputPage(
             this.attachments = memoInputViewModel.uploadAttachments
             memosViewModel.insertOrUpdate(this)
         }
-        navController.popBackStack()
+        navController.debouncedPopBackStack()
     }
 
     Scaffold(modifier = Modifier.imePadding(),
@@ -155,7 +156,7 @@ fun MemoInputPage(
                     focusManager.clearFocus()
                     focusRequester.freeFocus()
                 }
-                navController.popBackStack()
+                navController.debouncedPopBackStack()
             }) {
                 isEditMode = it
                 if (it) {

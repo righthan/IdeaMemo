@@ -43,6 +43,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.navigation.NavHostController
 import com.ldlywt.note.R
+import com.ldlywt.note.ui.page.router.debouncedPopBackStack
 import com.ldlywt.note.utils.Constant
 import com.ldlywt.note.utils.DonateUtils
 import com.ldlywt.note.utils.openMail
@@ -135,7 +136,7 @@ fun MoreInfoPage(
 
         TitleBar(
             onBack = {
-                navController.popBackStack()
+                navController.debouncedPopBackStack()
             },
             text = R.string.other.str
         )

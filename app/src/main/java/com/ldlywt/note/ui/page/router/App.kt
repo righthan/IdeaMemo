@@ -2,6 +2,7 @@ package com.ldlywt.note.ui.page.router
 
 import android.annotation.SuppressLint
 import android.os.Build
+import android.util.Log
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
@@ -39,6 +40,17 @@ import com.moriafly.salt.ui.darkSaltColors
 import com.moriafly.salt.ui.lightSaltColors
 import com.moriafly.salt.ui.saltColorsByColorScheme
 import com.moriafly.salt.ui.saltConfigs
+
+fun NavHostController.debouncedPopBackStack() {
+    val currentRoute = this.currentBackStackEntry?.destination?.route
+    val previousRoute = this.previousBackStackEntry?.destination?.route
+
+    if (currentRoute != null && previousRoute != null) {
+        this.popBackStack()
+    } else {
+        Log.w("Navigation", "Attempted to pop empty back stack")
+    }
+}
 
 @SuppressLint("UnrememberedMutableState")
 @OptIn(UnstableSaltApi::class)

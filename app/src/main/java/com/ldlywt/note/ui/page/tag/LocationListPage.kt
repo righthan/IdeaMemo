@@ -31,6 +31,7 @@ import com.ldlywt.note.ui.page.LocalMemosViewModel
 import com.ldlywt.note.ui.page.NoteViewModel
 import com.ldlywt.note.ui.page.home.clickable
 import com.ldlywt.note.ui.page.router.Screen
+import com.ldlywt.note.ui.page.router.debouncedPopBackStack
 import com.ldlywt.note.utils.str
 import com.moriafly.salt.ui.SaltTheme
 import com.moriafly.salt.ui.TitleBar
@@ -54,7 +55,7 @@ fun LocationListPage(navHostController: NavHostController) {
     ) {
         TitleBar(
             onBack = {
-                navHostController.popBackStack()
+                navHostController.debouncedPopBackStack()
             },
             text = stringResource(R.string.location_info)
         )

@@ -28,10 +28,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.ldlywt.note.R
-import com.ldlywt.note.ui.page.router.Screen
 import com.ldlywt.note.ui.page.LocalMemosViewModel
 import com.ldlywt.note.ui.page.LocalTags
 import com.ldlywt.note.ui.page.NoteViewModel
+import com.ldlywt.note.ui.page.router.Screen
+import com.ldlywt.note.ui.page.router.debouncedPopBackStack
 import com.moriafly.salt.ui.SaltTheme
 import com.moriafly.salt.ui.TitleBar
 import com.moriafly.salt.ui.UnstableSaltApi
@@ -56,7 +57,7 @@ fun TagListPage(navController: NavHostController) {
     ) {
         TitleBar(
             onBack = {
-                navController.popBackStack()
+                navController.debouncedPopBackStack()
             },
             text = stringResource(R.string.tag)
         )

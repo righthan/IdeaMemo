@@ -35,6 +35,7 @@ import com.ldlywt.note.bean.NoteShowBean
 import com.ldlywt.note.ui.page.router.Screen
 import com.ldlywt.note.ui.page.home.clickable
 import com.ldlywt.note.ui.page.LocalMemosState
+import com.ldlywt.note.ui.page.router.debouncedPopBackStack
 import com.moriafly.salt.ui.SaltTheme
 import com.moriafly.salt.ui.TitleBar
 import com.moriafly.salt.ui.UnstableSaltApi
@@ -73,7 +74,7 @@ fun GalleryPage(
     ) {
         TitleBar(
             onBack = {
-                navHostController.popBackStack()
+                navHostController.debouncedPopBackStack()
             },
             text = stringResource(R.string.gallery)
         )
