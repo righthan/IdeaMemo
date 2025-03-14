@@ -32,8 +32,6 @@ Here are the current features:
 - **Continuously Updated** : IdeaMemo is always in use by itself and will be continuously updated.
 - ...
 
-## 🚀 TODO
-[App Subsequent Iteration Plan](https://github.com/ldlywt/IdeaMemo/issues/2)
 
 ## ✈️ Download
 
