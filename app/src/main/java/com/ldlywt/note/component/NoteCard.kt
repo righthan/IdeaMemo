@@ -17,19 +17,17 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -37,17 +35,15 @@ import com.ldlywt.note.bean.Note
 import com.ldlywt.note.bean.NoteShowBean
 import com.ldlywt.note.bean.Tag
 import com.ldlywt.note.ui.page.router.Screen
-import com.ldlywt.note.utils.SettingsPreferences
 import com.ldlywt.note.utils.toTime
 import com.moriafly.salt.ui.SaltTheme
-import com.moriafly.salt.ui.UnstableSaltApi
 import dev.jeziellago.compose.markdowntext.MarkdownText
 
 enum class NoteCardFrom {
     SEARCH, TAG_DETAIL, COMMON, SHARE
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class, UnstableSaltApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun NoteCard(noteShowBean: NoteShowBean, navHostController: NavHostController, maxLine: Int, from: NoteCardFrom = NoteCardFrom.COMMON) {
 
@@ -57,6 +53,7 @@ fun NoteCard(noteShowBean: NoteShowBean, navHostController: NavHostController, m
         colors = CardDefaults.cardColors(containerColor = SaltTheme.colors.subBackground),
         modifier = Modifier
             .padding(horizontal = 16.dp, vertical = 4.dp)
+            .clip(CardDefaults.shape)
             .combinedClickable(
                 onClick = {
                     navHostController.navigate(route = Screen.InputDetail(noteShowBean.note.noteId))
