@@ -2,9 +2,10 @@
 
     <style name="Theme.Note" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="windowActionModeOverlay">true</item>
-        <item name="android:windowLightStatusBar">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:background"></item>
+        <!-- Use edge to edge -->
+        <!--<item name="android:windowLightStatusBar">true</item>-->
+        <!--<item name="android:statusBarColor">@android:color/transparent</item>-->
+        <item name="android:background">@null</item>
     </style>
 
     <style name="Theme.App.Starting" parent="Theme.SplashScreen">

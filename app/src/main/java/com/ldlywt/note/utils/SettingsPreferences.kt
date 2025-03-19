@@ -2,6 +2,7 @@ package com.ldlywt.note.utils
 
 import android.content.Context
 import androidx.annotation.StringRes
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
@@ -10,8 +11,10 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.ldlywt.note.App
 import com.ldlywt.note.R
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 
 private const val THEME_PREFERENCES = "THEME_PREFERENCES"
 private val Context.themePreferences by preferencesDataStore(name = THEME_PREFERENCES)
@@ -47,8 +50,20 @@ object SettingsPreferences {
         }
     }
 
+    fun applyAppCompatThemeMode(themeMode: ThemeMode) {
+        val appCompatMode = when (themeMode) {
+            ThemeMode.DARK -> AppCompatDelegate.MODE_NIGHT_YES
+            ThemeMode.LIGHT -> AppCompatDelegate.MODE_NIGHT_NO
+            ThemeMode.SYSTEM -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+        }
+        AppCompatDelegate.setDefaultNightMode(appCompatMode)
+    }
+
     suspend fun changeThemeMode(themeMode: ThemeMode) {
         updatePreference(PreferencesKeys.THEME_MODE, themeMode.name)
+        withContext(Dispatchers.Main) {
+            applyAppCompatThemeMode(themeMode)
+        }
     }
 
 
