@@ -73,6 +73,18 @@ GNU GPL v3.0 © [IdeaMemo](https://github.com/ldlywt/IdeaMemo/blob/master/LICENS
 <img src="https://github.com/user-attachments/assets/c8302f1b-bdef-4ed4-bc06-e5f53bc62380" alt="mm_facetoface_collect_qrcode_1742624668599" width="169" height="230.1">
 
 
+## 🌸 捐赠名单
+
+| 捐赠者名字         | 金额 |
+|-------------------|------|
+| 尧孟张             | 8.8   |
+| +（李刚)           | 5   |
+| Tomo Ebizuka      | 15   |
+| Corcube           | 10   |
+| 奶酪很热情         | 10   |
+| KavenSu          | 10   |
+
+
 ## ⭐ Star History
 
 [![Star History Chart]( https://api.star-history.com/svg?repos=ldlywt/IdeaMemo&type=Date)]( https://star-history.com/#ldlywt/IdeaMemo&Date)
