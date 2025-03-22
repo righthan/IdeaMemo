@@ -48,6 +48,9 @@ Here are the current features:
   detail as possible to help resolve it.
 - **Enjoy the app.** The best contribution is simply using and enjoying the app I spent so much time on!
 
+## 🌍 Translation
+Multi-language translation is done by AI, there may be errors, please point them out.Thanks!
+
 ## 🤗 Thanks
 This project was created by Compose. Some of the project's code is derived from excellent open-source projects.
 
