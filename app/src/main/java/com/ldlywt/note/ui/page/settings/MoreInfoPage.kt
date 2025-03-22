@@ -78,7 +78,7 @@ fun ContactDialog(block: () -> Unit) {
 
 @Composable
 fun DonateDialog(block: () -> Unit) {
-    val list = arrayListOf("尧孟张", "+（李刚)", "Tomo Ebizuka", "Corcube")
+    val list = arrayListOf("尧孟张", "+（李刚)", "Tomo Ebizuka", "Corcube", "奶酪很热情")
     AlertDialog(
         containerColor = SaltTheme.colors.background,
         onDismissRequest = { },
