@@ -70,8 +70,6 @@ GNU GPL v3.0 © [IdeaMemo](https://github.com/ldlywt/IdeaMemo/blob/master/LICENS
 
 <img src="https://github.com/user-attachments/assets/737f222d-cdf4-4091-b95d-9262e678b460" alt="1742624588864" width="163.8" height="245.7" style="margin-right: 200px;">
 
-<img src="https://github.com/user-attachments/assets/c8302f1b-bdef-4ed4-bc06-e5f53bc62380" alt="mm_facetoface_collect_qrcode_1742624668599" width="169" height="230.1">
-
 
 ## 🌸 捐赠名单
 
