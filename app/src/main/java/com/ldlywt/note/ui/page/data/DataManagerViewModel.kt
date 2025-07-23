@@ -6,6 +6,7 @@ import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import com.ldlywt.note.App
+import com.ldlywt.note.api.MemosApiService
 import com.ldlywt.note.backup.SyncManager
 import com.ldlywt.note.backup.model.DavData
 import com.ldlywt.note.bean.Note
@@ -23,7 +24,11 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class DataManagerViewModel @Inject constructor(private val tagNoteRepo: TagNoteRepo, private val syncManager: SyncManager) : ViewModel() {
+class DataManagerViewModel @Inject constructor(
+    private val tagNoteRepo: TagNoteRepo, 
+    private val syncManager: SyncManager,
+    private val memosApiService: MemosApiService
+) : ViewModel() {
 
     suspend fun restoreForWebdav(): List<DavData> = withIO {
         val dataList = syncManager.listAllFile(getAppName() + "/").filterNotNull().filter { it.name.endsWith(".zip") }.sortedByDescending { it.name }
@@ -66,5 +71,9 @@ class DataManagerViewModel @Inject constructor(private val tagNoteRepo: TagNoteR
 
     suspend fun checkConnection(url: String, account: String, pwd: String): Pair<Boolean, String> = withContext(Dispatchers.IO) {
         syncManager.checkConnection(url, account, pwd)
+    }
+
+    suspend fun checkMemosConnection(url: String, token: String): Pair<Boolean, String> = withContext(Dispatchers.IO) {
+        memosApiService.validateConnection(url, token)
     }
 }

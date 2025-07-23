@@ -33,6 +33,8 @@ import com.ldlywt.note.ui.page.tag.LocationListPage
 import com.ldlywt.note.ui.page.tag.TagDetailPage
 import com.ldlywt.note.ui.page.tag.TagListPage
 import com.ldlywt.note.ui.page.tag.YearDetailPage
+import com.ldlywt.note.ui.page.memos.MemosPage
+import com.ldlywt.note.ui.page.MemosPictureDisplayPage
 import com.ldlywt.note.utils.SettingsPreferences
 import com.moriafly.salt.ui.SaltTheme
 import com.moriafly.salt.ui.UnstableSaltApi
@@ -113,7 +115,7 @@ fun NavHostContainer(
         startDestination = Screen.Main,
     ) {
         composable<Screen.Explore> {
-            ExplorePage(navHostController = navController)
+            ExplorePage(navController = navController)
         }
         composable<Screen.TagList> {
             TagListPage(navController = navController)
@@ -124,7 +126,7 @@ fun NavHostContainer(
         }
 
         composable<Screen.RandomWalk> {
-            ExplorePage(navHostController = navController)
+            ExplorePage(navController = navController)
         }
         composable<Screen.Gallery> {
             GalleryPage(navHostController = navController)
@@ -143,6 +145,10 @@ fun NavHostContainer(
         }
         composable<Screen.MoreInfo> {
             MoreInfoPage(navController = navController)
+        }
+
+        composable<Screen.Memos> {
+            MemosPage(navController = navController)
         }
 
         composable<Screen.TagDetail> { navBackStackEntry ->
@@ -173,6 +179,15 @@ fun NavHostContainer(
         composable<Screen.Share> { navBackStackEntry ->
             val args = navBackStackEntry.toRoute<Screen.Share>()
             SharePage(args.id, navController)
+        }
+
+        composable<Screen.MemosPictureDisplay> { navBackStackEntry ->
+            val args = navBackStackEntry.toRoute<Screen.MemosPictureDisplay>()
+            MemosPictureDisplayPage(
+                imageUrls = args.imageUrls,
+                initialIndex = args.initialIndex,
+                navController = navController
+            )
         }
     }
 }

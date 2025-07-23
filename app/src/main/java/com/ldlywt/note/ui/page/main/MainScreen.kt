@@ -20,8 +20,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
-import com.ldlywt.note.ui.page.home.AllNotesPage
 import com.ldlywt.note.ui.page.home.CalenderPage
+import com.ldlywt.note.ui.page.memos.MemosPage
+import com.ldlywt.note.ui.page.settings.ExplorePage
 import com.ldlywt.note.ui.page.settings.SettingsPage
 import com.ldlywt.note.utils.isWideScreen
 import kotlinx.coroutines.launch
@@ -58,11 +59,10 @@ fun MainScreen(navController: NavHostController) {
             modifier = modifier
         ) { page ->
             when (page) {
-                0 -> AllNotesPage(navController = navController) { hide ->
-                    hideNavBar = hide
-                }
+                0 -> MemosPage(navController = navController)
                 1 -> CalenderPage(navController = navController)
-                2 -> SettingsPage(navController = navController)
+                2 -> ExplorePage(navController = navController)
+                3 -> SettingsPage(navController = navController)
             }
         }
     }

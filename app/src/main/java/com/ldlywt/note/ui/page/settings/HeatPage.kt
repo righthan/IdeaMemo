@@ -40,12 +40,16 @@ import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.kizitonwose.calendar.core.yearMonth
 import com.ldlywt.note.ui.page.home.displayText
 import com.ldlywt.note.ui.page.LocalMemosViewModel
+import com.ldlywt.note.ui.page.MemosViewModel
+import com.ldlywt.note.utils.SharedPreferencesUtils
 import com.moriafly.salt.ui.SaltTheme
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.compose.runtime.collectAsState
 
 enum class Level(val color: Color) {
     Zero(Color(0xFFEBEDF0)),
@@ -58,11 +62,20 @@ enum class Level(val color: Color) {
 @Composable
 fun HeatContent() {
     val noteViewModel = LocalMemosViewModel.current
-
+    val memosViewModel: MemosViewModel = hiltViewModel()
+    val memosLoginSuccess by SharedPreferencesUtils.memosLoginSuccess.collectAsState(false)
+    
     val endDate = remember { LocalDate.now() }
     // GitHub only shows contributions for the past 12 months
     val startDate = remember { endDate.minusMonths(12) }
     var selection by remember { mutableStateOf<Pair<LocalDate, Level>?>(null) }
+
+    // 根据登录状态选择数据源
+    val levelMap = if (memosLoginSuccess) {
+        memosViewModel.levelMemosMap
+    } else {
+        noteViewModel.levelMemosMap
+    }
 
     Column(
         modifier = Modifier
@@ -85,9 +98,9 @@ fun HeatContent() {
                     startDate = startDate,
                     endDate = endDate,
                     week = week,
-                    level = noteViewModel.levelMemosMap[day.date] ?: Level.Zero,
+                    level = levelMap[day.date] ?: Level.Zero,
                 ) { clicked ->
-                    selection = Pair(clicked, noteViewModel.levelMemosMap[clicked] ?: Level.Zero)
+                    selection = Pair(clicked, levelMap[clicked] ?: Level.Zero)
                 }
             },
             weekHeader = { WeekHeader(it) },

@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarMonth
+import androidx.compose.material.icons.filled.Explore
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
@@ -173,10 +174,10 @@ enum class NavigationBarPath(
         icon = {
             Icon(
                 imageVector = Icons.Default.Home,
-                contentDescription = "home"
+                contentDescription = "memos"
             )
         },
-        label = { "home" }
+        label = { "memos" }
     ),
     Calendar(
         route = "Calendar".capitalize(),
@@ -187,6 +188,16 @@ enum class NavigationBarPath(
             )
         },
         label = { "Calendar" }
+    ),
+    Explore(
+        route = "Explore".capitalize(),
+        icon = {
+            Icon(
+                imageVector = Icons.Default.Explore,
+                contentDescription = "explore"
+            )
+        },
+        label = { "explore" }
     ),
     Settings(
         route = "Settings".capitalize(),

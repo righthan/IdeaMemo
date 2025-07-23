@@ -51,3 +51,18 @@ fun Long.toTime(): String {
     val format = SimpleDateFormat("yyyy/MM/dd HH:mm", Locale.ENGLISH)
     return format.format(dateTime)
 }
+
+/**
+ * 将 Memos API 返回的时间字符串转换为显示格式
+ * Memos API 返回的时间格式通常是 ISO 8601 格式: 2025-07-23T07:32:52Z
+ */
+fun String.formatMemoTime(): String {
+    return try {
+        val instant = java.time.Instant.parse(this)
+        val formatter = java.time.format.DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")
+            .withZone(java.time.ZoneId.systemDefault())
+        formatter.format(instant)
+    } catch (e: Exception) {
+        this
+    }
+}

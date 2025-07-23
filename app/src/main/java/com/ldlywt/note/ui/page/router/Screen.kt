@@ -53,4 +53,10 @@ sealed class Screen {
 
     @Serializable
     object LocationList : Screen()
+
+    @Serializable
+    object Memos : Screen()
+
+    @Serializable
+    data class MemosPictureDisplay(val imageUrls: List<String>, val initialIndex: Int) : Screen()
 }

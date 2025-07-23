@@ -53,6 +53,7 @@ import com.ldlywt.note.R
 import com.ldlywt.note.component.ItemPopup
 import com.ldlywt.note.ui.page.LocalMemosState
 import com.ldlywt.note.ui.page.LocalTags
+import com.ldlywt.note.ui.page.MemosViewModel
 import com.ldlywt.note.ui.page.data.DataManagerViewModel
 import com.ldlywt.note.ui.page.main.MainActivity
 import com.ldlywt.note.ui.page.router.Screen
@@ -72,6 +73,7 @@ import com.moriafly.salt.ui.UnstableSaltApi
 import com.moriafly.salt.ui.popup.PopupMenuItem
 import com.moriafly.salt.ui.popup.rememberPopupState
 import kotlinx.coroutines.launch
+import com.ldlywt.note.utils.SharedPreferencesUtils
 
 
 @Composable
@@ -119,7 +121,6 @@ fun SettingsPreferenceScreen(navController: NavHostController) {
     val scope = rememberCoroutineScope()
 
     val settingList = listOf(
-        SettingsBean(R.string.random_walk, Icons.Outlined.Explore) { navController.navigate(Screen.RandomWalk) },
         SettingsBean(R.string.gallery, Icons.Outlined.Photo) { navController.navigate(Screen.Gallery) },
     )
 
@@ -233,13 +234,6 @@ fun SettingsPreferenceScreen(navController: NavHostController) {
                         },
                         text = R.string.biometric.str
                     )
-                    Item(
-                        onClick = {
-                            navController.navigate(Screen.DataManager)
-                        },
-                        text = R.string.local_data_manager.str,
-                        iconPainter = rememberVectorPainter(ImageVector.vectorResource(R.drawable.ic_database))
-                    )
 
                     settingList.forEachIndexed { index, it ->
                         Item(
@@ -250,18 +244,6 @@ fun SettingsPreferenceScreen(navController: NavHostController) {
                             iconPainter = rememberVectorPainter(it.imageVector),
                         )
                     }
-
-                    Item(
-                        onClick = {
-                            lunchIo {
-                                dataViewModel.fixTag()
-                                toast(R.string.excute_success.str)
-                            }
-                        },
-                        text = R.string.tag_fix.str,
-                        iconPainter = rememberVectorPainter(Icons.Outlined.Label),
-                    )
-
                 }
             }
 
@@ -306,25 +288,51 @@ fun SettingsPreferenceScreen(navController: NavHostController) {
 @Composable
 fun SettingsHeadLayout() {
     val noteState = LocalMemosState.current
-    val memos by lazy(noteState::notes)
+    val memos by noteState::notes
     val tagList = LocalTags.current
+    
+    // Memos 相关状态
+    val memosViewModel: MemosViewModel = hiltViewModel()
+    val memosLoginSuccess by SharedPreferencesUtils.memosLoginSuccess.collectAsState(false)
+    val memosTotalCount by memosViewModel.totalMemoCount.collectAsState()
+    val memosTagStats by memosViewModel.userStats.collectAsState()
+    val memosUniqueDays by memosViewModel.uniqueDaysCount.collectAsState()
 
     Row {
         val modifier = Modifier.weight(1f)
 
-        boxText(
-            modifier, memos.size.toString(), R.string.all_note.str
-        )
-        boxText(
-            modifier, memos.fastSumBy { it.note.noteTitle?.length ?: (0 + it.note.content.length) }.toString(), R.string.characters.str
-        )
-        boxText(
-            modifier, memos.map { it.note.createTime.toYYMMDD() }.toSet().size.toString(), R.string.dyas.str
-        )
+        // 总笔记数
+        val totalNotesCount = if (memosLoginSuccess) {
+            memosTotalCount.toString()
+        } else {
+            memos.size.toString()
+        }
 
-        boxText(
-            modifier, tagList.size.toString(), R.string.tag.str
-        )
+        // 字符数（只有本地数据可以计算）
+        val charactersCount = if (memosLoginSuccess) {
+            "N/A" // Memos API 不提供字符数统计
+        } else {
+            memos.fastSumBy { it.note.noteTitle?.length ?: (0 + it.note.content.length) }.toString()
+        }
+
+        // 天数统计
+        val daysCount = if (memosLoginSuccess) {
+            memosUniqueDays.toString()
+        } else {
+            memos.map { it.note.createTime.toYYMMDD() }.toSet().size.toString()
+        }
+
+        // 标签数量
+        val tagsCount = if (memosLoginSuccess) {
+            memosTagStats.size.toString()
+        } else {
+            tagList.size.toString()
+        }
+
+        boxText(modifier, totalNotesCount, R.string.all_note.str)
+        boxText(modifier, charactersCount, R.string.characters.str)
+        boxText(modifier, daysCount, R.string.dyas.str)
+        boxText(modifier, tagsCount, R.string.tag.str)
     }
 }
 

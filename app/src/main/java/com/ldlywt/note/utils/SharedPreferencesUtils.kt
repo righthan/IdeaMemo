@@ -23,6 +23,15 @@ object SharedPreferencesUtils {
         val DAV_SERVER_URL = stringPreferencesKey("dav_server_url")
         val DAV_USER_NAME = stringPreferencesKey("dav_user_name")
         val DAV_PASSWORD = stringPreferencesKey("dav_password")
+        val MEMOS_LOGIN_SUCCESS = booleanPreferencesKey("memos_login_success")
+        val MEMOS_SERVER_URL = stringPreferencesKey("memos_server_url")
+        val MEMOS_AUTH_TOKEN = stringPreferencesKey("memos_auth_token")
+        val MEMOS_USER_NAME = stringPreferencesKey("memos_user_name")
+        val MEMOS_USER_DISPLAY_NAME = stringPreferencesKey("memos_user_display_name")
+        val MEMOS_USER_ROLE = stringPreferencesKey("memos_user_role")
+        val MEMOS_TAG_COUNT = stringPreferencesKey("memos_tag_count")
+        val MEMOS_TOTAL_MEMO_COUNT = stringPreferencesKey("memos_total_memo_count")
+        val MEMOS_DISPLAY_TIMESTAMPS = stringPreferencesKey("memos_display_timestamps")
     }
 
     private val sharedPreferences = App.instance.sharedDataStore
@@ -40,7 +49,17 @@ object SharedPreferencesUtils {
     val davServerUrl: Flow<String?> = sharedPreferences.getString(PreferencesKeys.DAV_SERVER_URL, "https://dav.jianguoyun.com/dav/")
     val davUserName: Flow<String?> = sharedPreferences.getString(PreferencesKeys.DAV_USER_NAME, null)
     val davPassword: Flow<String?> = sharedPreferences.getString(PreferencesKeys.DAV_PASSWORD, null)
-
+    
+    val memosLoginSuccess: Flow<Boolean> = sharedPreferences.getBoolean(PreferencesKeys.MEMOS_LOGIN_SUCCESS, false)
+    val memosServerUrl: Flow<String?> = sharedPreferences.getString(PreferencesKeys.MEMOS_SERVER_URL, "")
+    val memosAuthToken: Flow<String?> = sharedPreferences.getString(PreferencesKeys.MEMOS_AUTH_TOKEN, null)
+    val memosUserName: Flow<String?> = sharedPreferences.getString(PreferencesKeys.MEMOS_USER_NAME, null)
+    val memosUserDisplayName: Flow<String?> = sharedPreferences.getString(PreferencesKeys.MEMOS_USER_DISPLAY_NAME, null)
+    val memosUserRole: Flow<String?> = sharedPreferences.getString(PreferencesKeys.MEMOS_USER_ROLE, null)
+    
+    val memosTagCount: Flow<String?> = sharedPreferences.getString(PreferencesKeys.MEMOS_TAG_COUNT, null)
+    val memosTotalMemoCount: Flow<String?> = sharedPreferences.getString(PreferencesKeys.MEMOS_TOTAL_MEMO_COUNT, null)
+    val memosDisplayTimestamps: Flow<String?> = sharedPreferences.getString(PreferencesKeys.MEMOS_DISPLAY_TIMESTAMPS, null)
 
 
     suspend fun clearDavConfig() {
@@ -50,6 +69,20 @@ object SharedPreferencesUtils {
             preferences.remove(PreferencesKeys.DAV_USER_NAME)
             preferences.remove(PreferencesKeys.DAV_PASSWORD)
 
+        }
+    }
+
+    suspend fun clearMemosConfig() {
+        sharedPreferences.edit { preferences ->
+            preferences[PreferencesKeys.MEMOS_LOGIN_SUCCESS] = false
+            preferences.remove(PreferencesKeys.MEMOS_SERVER_URL)
+            preferences.remove(PreferencesKeys.MEMOS_AUTH_TOKEN)
+            preferences.remove(PreferencesKeys.MEMOS_USER_NAME)
+            preferences.remove(PreferencesKeys.MEMOS_USER_DISPLAY_NAME)
+            preferences.remove(PreferencesKeys.MEMOS_USER_ROLE)
+            preferences.remove(PreferencesKeys.MEMOS_TAG_COUNT)
+            preferences.remove(PreferencesKeys.MEMOS_TOTAL_MEMO_COUNT)
+            preferences.remove(PreferencesKeys.MEMOS_DISPLAY_TIMESTAMPS)
         }
     }
 
@@ -91,6 +124,41 @@ object SharedPreferencesUtils {
         updatePreference(PreferencesKeys.USE_SAFE, use)
     }
 
+    suspend fun updateMemosLoginSuccess(success: Boolean) {
+        updatePreference(PreferencesKeys.MEMOS_LOGIN_SUCCESS, success)
+    }
+
+    suspend fun updateMemosServerUrl(url: String?) {
+        updatePreference(PreferencesKeys.MEMOS_SERVER_URL, url)
+    }
+
+    suspend fun updateMemosAuthToken(token: String?) {
+        updatePreference(PreferencesKeys.MEMOS_AUTH_TOKEN, token)
+    }
+
+    suspend fun updateMemosUserName(userName: String?) {
+        updatePreference(PreferencesKeys.MEMOS_USER_NAME, userName)
+    }
+
+    suspend fun updateMemosUserDisplayName(displayName: String?) {
+        updatePreference(PreferencesKeys.MEMOS_USER_DISPLAY_NAME, displayName)
+    }
+
+    suspend fun updateMemosUserRole(role: String?) {
+        updatePreference(PreferencesKeys.MEMOS_USER_ROLE, role)
+    }
+    
+    suspend fun updateMemosTagCount(tagCountJson: String?) {
+        updatePreference(PreferencesKeys.MEMOS_TAG_COUNT, tagCountJson)
+    }
+    
+    suspend fun updateMemosTotalMemoCount(totalCount: Int) {
+        updatePreference(PreferencesKeys.MEMOS_TOTAL_MEMO_COUNT, totalCount.toString())
+    }
+    
+    suspend fun updateMemosDisplayTimestamps(timestampsJson: String?) {
+        updatePreference(PreferencesKeys.MEMOS_DISPLAY_TIMESTAMPS, timestampsJson)
+    }
 
 
 }

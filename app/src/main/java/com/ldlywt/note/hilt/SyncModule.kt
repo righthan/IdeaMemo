@@ -2,6 +2,7 @@ package com.ldlywt.note.hilt
 
 import android.app.Application
 import android.content.Context
+import com.ldlywt.note.api.MemosApiService
 import com.ldlywt.note.backup.SyncManager
 import com.ldlywt.note.backup.api.Encryption
 import com.ldlywt.note.backup.utils.DefaultEncryption
@@ -31,6 +32,12 @@ object SyncModule {
     @Singleton
     fun provideContext(application: Application): Context {
         return application.applicationContext
+    }
+
+    @Provides
+    @Singleton
+    fun provideMemosApiService(): MemosApiService {
+        return MemosApiService()
     }
 
 }

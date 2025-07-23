@@ -102,8 +102,10 @@ fun DataManagerPage(
     val context = LocalContext.current as AppCompatActivity
     val snackbarState = remember { SnackbarHostState() }
     var webInputDialog: Boolean by remember { mutableStateOf(false) }
+    var memosInputDialog: Boolean by remember { mutableStateOf(false) }
     val autoBackSwitchState = SharedPreferencesUtils.localAutoBackup.collectAsState(false)
     val jianGuoCloudSwitchState = SharedPreferencesUtils.davLoginSuccess.collectAsState(false)
+    val memosLoginSwitchState = SharedPreferencesUtils.memosLoginSuccess.collectAsState(false)
     val isLogin = viewModel.isLogin
 
     fun navToWebdavConfigPage() {
@@ -311,6 +313,21 @@ fun DataManagerPage(
             )
         }
 
+        if (memosInputDialog) {
+            MemosConfigInputDialog(
+                viewModel = viewModel,
+                onDismissRequest = {
+                    memosInputDialog = false
+                },
+                onConfirm = {
+                    memosInputDialog = false
+                    scope.launch {
+                        SharedPreferencesUtils.updateMemosLoginSuccess(true)
+                    }
+                },
+            )
+        }
+
         RoundedColumn {
             ItemSwitcher(
                 text = R.string.webdav_auth.str,
@@ -333,6 +350,22 @@ fun DataManagerPage(
                     restoreForWebdav()
                 })
             }
+        }
+
+        RoundedColumn {
+            ItemSwitcher(
+                text = "Memos 数据源",
+                state = memosLoginSwitchState.value,
+                onChange = {
+                    if (memosLoginSwitchState.value) {
+                        scope.launch {
+                            SharedPreferencesUtils.clearMemosConfig()
+                        }
+                    } else {
+                        memosInputDialog = true
+                    }
+                }
+            )
         }
     }
     LoadingComponent(isLoading)
@@ -530,6 +563,92 @@ fun AccountInputDialog(
                 },
                 modifier = Modifier
                     .weight(1f),
+                text = R.string.submit.str
+            )
+        }
+        ItemOutSpacer()
+    }
+}
+
+@UnstableSaltApi
+@Composable
+fun MemosConfigInputDialog(
+    viewModel: DataManagerViewModel,
+    onDismissRequest: () -> Unit,
+    onConfirm: () -> Unit,
+    properties: DialogProperties = DialogProperties(),
+) {
+    val scope = rememberCoroutineScope()
+    BasicDialog(
+        onDismissRequest = onDismissRequest,
+        properties = properties
+    ) {
+        ItemOutSpacer()
+        ItemOutHalfSpacer()
+
+        ItemTitle(text = "Memos 配置")
+
+        val serverUrl = SharedPreferencesUtils.memosServerUrl.collectAsState("")
+        val authToken = SharedPreferencesUtils.memosAuthToken.collectAsState(null)
+
+        ItemEdit(
+            text = serverUrl.value ?: "",
+            onChange = {
+                scope.launch {
+                    SharedPreferencesUtils.updateMemosServerUrl(it)
+                }
+            },
+            hint = "服务器地址 (如: http://localhost:5230)"
+        )
+
+        ItemEdit(
+            text = authToken.value ?: "",
+            onChange = {
+                scope.launch {
+                    SharedPreferencesUtils.updateMemosAuthToken(it)
+                }
+            },
+            hint = "Bearer Token"
+        )
+
+        ItemOutHalfSpacer()
+        Row(
+            modifier = Modifier.padding(horizontal = SaltTheme.dimens.outerHorizontalPadding)
+        ) {
+            com.moriafly.salt.ui.TextButton(
+                onClick = {
+                    onDismissRequest()
+                },
+                modifier = Modifier.weight(1f),
+                text = R.string.cancel.str,
+                textColor = SaltTheme.colors.subText,
+                backgroundColor = SaltTheme.colors.subBackground
+            )
+            Spacer(modifier = Modifier.width(SaltTheme.dimens.contentPadding))
+            com.moriafly.salt.ui.TextButton(
+                onClick = {
+                    val url = serverUrl.value?.trim()
+                    val token = authToken.value?.trim()
+                    
+                    if (url.isNullOrEmpty() || token.isNullOrEmpty()) {
+                        toast("请填写完整信息")
+                        return@TextButton
+                    }
+                    
+                    lunchIo {
+                        val pair = viewModel.checkMemosConnection(url, token)
+                        withContext(Dispatchers.Main) {
+                            toast(pair.second)
+                            scope.launch {
+                                SharedPreferencesUtils.updateMemosLoginSuccess(pair.first)
+                                if (pair.first) {
+                                    onConfirm()
+                                }
+                            }
+                        }
+                    }
+                },
+                modifier = Modifier.weight(1f),
                 text = R.string.submit.str
             )
         }
