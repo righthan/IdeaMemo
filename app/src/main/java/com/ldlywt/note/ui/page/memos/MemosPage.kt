@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -37,6 +38,7 @@ import com.ldlywt.note.R
 import com.ldlywt.note.component.MemoCard
 import com.ldlywt.note.component.RYScaffold
 import com.ldlywt.note.ui.page.MemosViewModel
+import com.ldlywt.note.ui.page.router.Screen
 import com.ldlywt.note.utils.SharedPreferencesUtils
 import com.ldlywt.note.utils.str
 import com.moriafly.salt.ui.SaltTheme
@@ -90,12 +92,14 @@ fun MemosPage(
         actions = {
             IconButton(
                 onClick = {
-                    memosViewModel.refreshMemos()
+                    navController.navigate(route = Screen.Search) {
+                        launchSingleTop = true
+                    }
                 }
             ) {
                 Icon(
-                    imageVector = Icons.Default.Refresh,
-                    contentDescription = "刷新",
+                    imageVector = Icons.Outlined.Search,
+                    contentDescription = stringResource(R.string.search_hint),
                     tint = SaltTheme.colors.text
                 )
             }

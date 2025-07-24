@@ -30,13 +30,13 @@ import com.ldlywt.note.utils.SharedPreferencesUtils
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MemosPictureDisplayPage(
-    imageUrls: List<String>, 
+    imageUrls: List<String>,
     initialIndex: Int,
     navController: NavHostController
 ) {
-    val authToken by SharedPreferencesUtils.memosAuthToken.collectAsState("")
+    val userSession by SharedPreferencesUtils.memosUserSession.collectAsState("")
     val pagerState = rememberPagerState(
-        pageCount = { imageUrls.size }, 
+        pageCount = { imageUrls.size },
         initialPage = initialIndex
     )
 
@@ -45,16 +45,16 @@ fun MemosPictureDisplayPage(
             Surface(modifier = Modifier.fillMaxSize()) {
                 MemosDetailContent(
                     imgUrl = imageUrls[page],
-                    authToken = authToken ?: "",
+                    userSession = userSession ?: "",
                     requestImage = {
-                        MemosImage(imageUrls[page], authToken ?: "")
+                        MemosImage(imageUrls[page],userSession ?: "")
                     }
                 )
             }
         }
-        
+
         IconButton(
-            onClick = { navController.debouncedPopBackStack() }, 
+            onClick = { navController.debouncedPopBackStack() },
             modifier = Modifier.padding(start = 12.dp, top = 24.dp, end = 0.dp, bottom = 0.dp)
         ) {
             Icon(
@@ -69,7 +69,7 @@ fun MemosPictureDisplayPage(
 @Composable
 private fun MemosDetailContent(
     imgUrl: String?,
-    authToken: String,
+    userSession: String,
     modifier: Modifier = Modifier,
     requestImage: @Composable () -> Unit
 ) {
@@ -78,7 +78,7 @@ private fun MemosDetailContent(
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
                 .data(imgUrl)
-                .addHeader("Authorization", "Bearer $authToken")
+                .addHeader("Cookie",  "user_session=$userSession")
                 .transformations(
                     BlurTransformation(
                         LocalContext.current,
@@ -99,11 +99,11 @@ private fun MemosDetailContent(
 }
 
 @Composable
-private fun MemosImage(imgUrl: String, authToken: String) {
+private fun MemosImage(imgUrl: String, userSession: String) {
     AsyncImage(
         model = ImageRequest.Builder(LocalContext.current)
             .data(imgUrl)
-            .addHeader("Authorization", "Bearer $authToken")
+            .addHeader("Cookie",  "user_session=$userSession")
             .crossfade(true)
             .build(),
         contentDescription = null,

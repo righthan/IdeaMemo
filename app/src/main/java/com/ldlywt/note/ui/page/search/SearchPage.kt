@@ -1,17 +1,19 @@
 package com.ldlywt.note.ui.page.search
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Clear
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -32,14 +34,13 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.ldlywt.note.R
-import com.ldlywt.note.component.NoteCard
-import com.ldlywt.note.component.NoteCardFrom
+import com.ldlywt.note.component.MemoCard
 import com.ldlywt.note.ui.page.router.debouncedPopBackStack
-import com.ldlywt.note.utils.SettingsPreferences
 import com.moriafly.salt.ui.SaltTheme
 import kotlinx.coroutines.delay
 
@@ -54,8 +55,9 @@ fun SearchPage(
     var searchBarExpanded by rememberSaveable { mutableStateOf(false) }
     val searchQuery by searchViewModel.query.collectAsState()
     val focusRequester = remember { FocusRequester() }
-    val filterList by searchViewModel.dataFlow.collectAsState(initial = emptyList())
-    val maxLine by SettingsPreferences.cardMaxLine.collectAsState(SettingsPreferences.CardMaxLineMode.MAX_LINE)
+    val memosList by searchViewModel.memosFlow.collectAsState(initial = emptyList())
+    val isLoading by searchViewModel.isLoading.collectAsState()
+    val error by searchViewModel.error.collectAsState()
 
     Box(Modifier.fillMaxSize()) {
         SearchBar(
@@ -88,12 +90,6 @@ fun SearchPage(
                             }) {
                                 Icon(imageVector = Icons.Rounded.Clear, contentDescription = "")
                             }
-//                            IconButton(onClick = {  }) {
-//                                Icon(
-//                                    imageVector = Icons.Rounded.MoreVert,
-//                                    contentDescription =""
-//                                )
-//                            }
                         }
                     },
                 )
@@ -104,20 +100,57 @@ fun SearchPage(
             expanded = searchBarExpanded,
             onExpandedChange = { if (!it) navController.debouncedPopBackStack() },
         ) {
-            LazyColumn(
+            Column(
                 Modifier
-//                    .background(SaltTheme.colors.background)
                     .fillMaxSize()
-                    .padding()
+                    .padding(top = 16.dp)
             ) {
-                item {
-                    Spacer(modifier = Modifier.height(16.dp))
-                }
-                items(count = filterList.size, key = { it }) { index ->
-                    NoteCard(noteShowBean = filterList[index], navController, from = NoteCardFrom.SEARCH, maxLine = maxLine.line)
-                }
-                item {
-                    Spacer(modifier = Modifier.height(60.dp))
+                // 加载指示器
+                if (isLoading) {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator()
+                    }
+                } else if (error != null) {
+                    // 错误状态
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = "搜索失败",
+                                style = SaltTheme.textStyles.main,
+                                color = SaltTheme.colors.text
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text(
+                                text = error ?: "",
+                                style = SaltTheme.textStyles.sub,
+                                color = SaltTheme.colors.subText,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
+                } else {
+                    // 搜索结果
+                    LazyColumn(
+                        Modifier.fillMaxSize()
+                    ) {
+                        items(
+                            items = memosList,
+                            key = { it.name }
+                        ) { memo ->
+                            MemoCard(memo = memo, navHostController = navController)
+                        }
+                        item {
+                            Spacer(modifier = Modifier.height(60.dp))
+                        }
+                    }
                 }
             }
         }

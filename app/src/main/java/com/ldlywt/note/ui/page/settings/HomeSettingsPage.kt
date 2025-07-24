@@ -74,6 +74,7 @@ import com.moriafly.salt.ui.popup.PopupMenuItem
 import com.moriafly.salt.ui.popup.rememberPopupState
 import kotlinx.coroutines.launch
 import com.ldlywt.note.utils.SharedPreferencesUtils
+import com.ldlywt.note.ui.page.auth.UserInfoComponent
 
 
 @Composable
@@ -131,6 +132,19 @@ fun SettingsPreferenceScreen(navController: NavHostController) {
             item(content = {
                 HeatContent()
             })
+
+            // 用户信息组件
+            item {
+                val memosLoginSuccess by SharedPreferencesUtils.memosLoginSuccess.collectAsState(false)
+                if (memosLoginSuccess) {
+                    UserInfoComponent(
+                        onLogout = {
+                            // 重新启动Activity以回到登录页面
+                            (context as? MainActivity)?.recreate()
+                        }
+                    )
+                }
+            }
 
             item(content = {
                 SettingsHeadLayout()

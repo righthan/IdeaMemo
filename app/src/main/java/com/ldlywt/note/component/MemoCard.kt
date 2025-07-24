@@ -21,7 +21,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.ldlywt.note.api.Memo
+import com.ldlywt.note.api.memos.Memo
 import com.ldlywt.note.utils.formatMemoTime
 import com.moriafly.salt.ui.SaltTheme
 import dev.jeziellago.compose.markdowntext.MarkdownText

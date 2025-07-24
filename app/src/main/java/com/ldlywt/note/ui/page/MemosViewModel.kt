@@ -3,8 +3,9 @@ package com.ldlywt.note.ui.page
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ldlywt.note.api.Memo
-import com.ldlywt.note.api.MemosApiService
+import com.ldlywt.note.api.memos.Memo
+import com.ldlywt.note.api.memos.MemosApiService
+import com.ldlywt.note.api.users.UsersApiService
 import com.ldlywt.note.ui.page.settings.Level
 import com.ldlywt.note.utils.SharedPreferencesUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,7 +26,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MemosViewModel @Inject constructor(
-    private val memosApiService: MemosApiService
+    private val memosApiService: MemosApiService,
+    private val usersApiService: UsersApiService
 ) : ViewModel() {
     
     private val _memos = MutableStateFlow<List<Memo>>(emptyList())
@@ -67,18 +69,7 @@ class MemosViewModel @Inject constructor(
     init {
         // 只有在配置完成且登录成功时才加载数据
         viewModelScope.launch {
-            val isLoginSuccess = SharedPreferencesUtils.memosLoginSuccess.first()
-            val serverUrl = SharedPreferencesUtils.memosServerUrl.first()
-            val authToken = SharedPreferencesUtils.memosAuthToken.first()
-            val userName = SharedPreferencesUtils.memosUserName.first()
-            
-            if (isLoginSuccess && 
-                !serverUrl.isNullOrBlank() && 
-                !authToken.isNullOrBlank() && 
-                !userName.isNullOrBlank()) {
-                loadMemos()
-                loadUserStats()
-            }
+            checkConfigAndLoadMemos()
         }
     }
     
@@ -135,7 +126,7 @@ class MemosViewModel @Inject constructor(
     private fun loadUserStats() {
         viewModelScope.launch {
             try {
-                val response = memosApiService.getUserStats()
+                val response = usersApiService.getUserStats()
                 
                 // 更新状态
                 _userStats.value = response.tagCount
@@ -236,12 +227,12 @@ class MemosViewModel @Inject constructor(
         viewModelScope.launch {
             val isLoginSuccess = SharedPreferencesUtils.memosLoginSuccess.first()
             val serverUrl = SharedPreferencesUtils.memosServerUrl.first()
-            val authToken = SharedPreferencesUtils.memosAuthToken.first()
+            val userSession = SharedPreferencesUtils.memosUserSession.first()
             val userName = SharedPreferencesUtils.memosUserName.first()
             
             if (isLoginSuccess && 
                 !serverUrl.isNullOrBlank() && 
-                !authToken.isNullOrBlank() && 
+                !userSession.isNullOrBlank() &&
                 !userName.isNullOrBlank()) {
                 loadMemos()
                 loadUserStats()
@@ -252,5 +243,6 @@ class MemosViewModel @Inject constructor(
     override fun onCleared() {
         super.onCleared()
         memosApiService.close()
+        usersApiService.close()
     }
 } 

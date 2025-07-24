@@ -1,4 +1,4 @@
-package com.ldlywt.note.api
+package com.ldlywt.note.api.memos
 
 import kotlinx.serialization.Serializable
 
@@ -70,52 +70,4 @@ data class MemosProperty(
     val hasTaskList: Boolean = false,
     val hasCode: Boolean = false,
     val hasIncompleteTasks: Boolean = false
-)
-
-// 验证响应数据模型
-@Serializable
-data class AuthValidationSuccessResponse(
-    val user: UserInfo,
-    val lastAccessedAt: String? = null
-)
-
-@Serializable
-data class UserInfo(
-    val name: String,
-    val role: String,
-    val username: String,
-    val email: String = "",
-    val displayName: String = "",
-    val avatarUrl: String = "",
-    val description: String = "",
-    val password: String = "",
-    val state: String = "NORMAL",
-    val createTime: String,
-    val updateTime: String
-)
-
-@Serializable
-data class AuthValidationErrorResponse(
-    val code: Int,
-    val message: String,
-    val details: List<String> = emptyList()
-)
-
-// 用户统计信息数据模型
-@Serializable
-data class UserStatsResponse(
-    val name: String,
-    val memoDisplayTimestamps: List<String>,
-    val memoTypeStats: MemoTypeStats,
-    val tagCount: Map<String, Int>,
-    val pinnedMemos: List<String>,
-    val totalMemoCount: Int
-)
-
-@Serializable
-data class MemoTypeStats(
-    val linkCount: Int,
-    val codeCount: Int,
-    val todoCount: Int,
-    val undoCount: Int
 ) 

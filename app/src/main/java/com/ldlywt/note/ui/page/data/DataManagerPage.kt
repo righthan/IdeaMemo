@@ -39,6 +39,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.LocalContext
@@ -589,7 +590,8 @@ fun MemosConfigInputDialog(
         ItemTitle(text = "Memos 配置")
 
         val serverUrl = SharedPreferencesUtils.memosServerUrl.collectAsState("")
-        val authToken = SharedPreferencesUtils.memosAuthToken.collectAsState(null)
+        val username = SharedPreferencesUtils.memosUsername.collectAsState(null)
+        val password = remember { mutableStateOf("") }
 
         ItemEdit(
             text = serverUrl.value ?: "",
@@ -602,13 +604,21 @@ fun MemosConfigInputDialog(
         )
 
         ItemEdit(
-            text = authToken.value ?: "",
+            text = username.value ?: "",
             onChange = {
                 scope.launch {
-                    SharedPreferencesUtils.updateMemosAuthToken(it)
+                    SharedPreferencesUtils.updateMemosUsername(it)
                 }
             },
-            hint = "Bearer Token"
+            hint = "用户名"
+        )
+
+        ItemEditPassword(
+            text = password.value,
+            onChange = {
+                password.value = it
+            },
+            hint = "密码"
         )
 
         ItemOutHalfSpacer()
@@ -628,15 +638,16 @@ fun MemosConfigInputDialog(
             com.moriafly.salt.ui.TextButton(
                 onClick = {
                     val url = serverUrl.value?.trim()
-                    val token = authToken.value?.trim()
+                    val user = username.value?.trim()
+                    val pass = password.value.trim()
                     
-                    if (url.isNullOrEmpty() || token.isNullOrEmpty()) {
+                    if (url.isNullOrEmpty() || user.isNullOrEmpty() || pass.isEmpty()) {
                         toast("请填写完整信息")
                         return@TextButton
                     }
                     
                     lunchIo {
-                        val pair = viewModel.checkMemosConnection(url, token)
+                        val pair = viewModel.checkMemosConnection(url, user, pass)
                         withContext(Dispatchers.Main) {
                             toast(pair.second)
                             scope.launch {

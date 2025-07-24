@@ -25,8 +25,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import com.ldlywt.note.R
-import com.ldlywt.note.api.Memo
-import com.ldlywt.note.api.MemosApiService
+import com.ldlywt.note.api.memos.Memo
+import com.ldlywt.note.api.memos.MemosApiService
 import com.ldlywt.note.component.DraggableCard
 import com.ldlywt.note.component.EmptyComponent
 import com.ldlywt.note.component.LoadingComponent

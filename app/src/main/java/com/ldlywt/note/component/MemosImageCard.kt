@@ -21,15 +21,15 @@ import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.ldlywt.note.api.Memo
-import com.ldlywt.note.api.MemoAttachment
+import com.ldlywt.note.api.memos.Memo
+import com.ldlywt.note.api.memos.MemoAttachment
 import com.ldlywt.note.ui.page.router.Screen
 import com.ldlywt.note.utils.SharedPreferencesUtils
 
 @Composable
 fun MemosImageCard(memo: Memo, navHostController: NavHostController? = null) {
     val baseUrl by SharedPreferencesUtils.memosServerUrl.collectAsState("")
-    val authToken by SharedPreferencesUtils.memosAuthToken.collectAsState("")
+    val userSession by SharedPreferencesUtils.memosUserSession.collectAsState("")
     // 过滤出图片类型的附件
     val imageAttachments = memo.attachments.filter { 
         it.type.startsWith("image/") 
@@ -46,7 +46,7 @@ fun MemosImageCard(memo: Memo, navHostController: NavHostController? = null) {
         AsyncImage(
             model = ImageRequest.Builder(context)
                 .data(imageUrl)
-                .addHeader("Authorization", "Bearer $authToken")
+                .addHeader("Cookie",  "user_session=$userSession")
                 .build(),
             contentDescription = attachment.filename,
             modifier = Modifier
@@ -82,7 +82,7 @@ fun MemosImageCard(memo: Memo, navHostController: NavHostController? = null) {
                 AsyncImage(
                     model = ImageRequest.Builder(context)
                         .data(imageUrl)
-                        .addHeader("Authorization", "Bearer $authToken")
+                        .addHeader("Cookie",  "user_session=$userSession")
                         .build(),
                     contentDescription = attachment.filename,
                     modifier = Modifier

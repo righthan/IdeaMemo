@@ -6,7 +6,7 @@ import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import com.ldlywt.note.App
-import com.ldlywt.note.api.MemosApiService
+import com.ldlywt.note.api.auth.AuthApiService
 import com.ldlywt.note.backup.SyncManager
 import com.ldlywt.note.backup.model.DavData
 import com.ldlywt.note.bean.Note
@@ -27,7 +27,7 @@ import javax.inject.Inject
 class DataManagerViewModel @Inject constructor(
     private val tagNoteRepo: TagNoteRepo, 
     private val syncManager: SyncManager,
-    private val memosApiService: MemosApiService
+    private val authApiService: AuthApiService
 ) : ViewModel() {
 
     suspend fun restoreForWebdav(): List<DavData> = withIO {
@@ -73,7 +73,7 @@ class DataManagerViewModel @Inject constructor(
         syncManager.checkConnection(url, account, pwd)
     }
 
-    suspend fun checkMemosConnection(url: String, token: String): Pair<Boolean, String> = withContext(Dispatchers.IO) {
-        memosApiService.validateConnection(url, token)
+    suspend fun checkMemosConnection(url: String, username: String, password: String): Pair<Boolean, String> = withContext(Dispatchers.IO) {
+        authApiService.login(url, username, password)
     }
 }

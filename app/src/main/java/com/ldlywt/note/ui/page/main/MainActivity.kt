@@ -27,6 +27,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import com.ldlywt.note.ui.page.auth.LoginPage
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.getValue
+import kotlinx.coroutines.flow.first
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -58,8 +65,10 @@ class MainActivity : AppCompatActivity() {
     // 提取公共的 setContent 逻辑
     private fun setupContent() {
         setContent {
-            SettingsProvider {
-                App()
+            AuthenticationWrapper {
+                SettingsProvider {
+                    App()
+                }
             }
         }
     }
@@ -75,6 +84,26 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
+    @Composable
+    fun AuthenticationWrapper(
+        content: @Composable () -> Unit
+    ) {
+        // 实时监听登录状态
+        val memosLoginSuccess by SharedPreferencesUtils.memosLoginSuccess.collectAsState(false)
+        val userSession by SharedPreferencesUtils.memosUserSession.collectAsState(null)
+        val isLoggedIn = memosLoginSuccess && !userSession.isNullOrEmpty()
+
+        if (isLoggedIn) {
+            content()
+        } else {
+            LoginPage(
+                onLoginSuccess = {
+                    // 登录成功后会自动更新 SharedPreferences，无需手动设置状态
+                }
+            )
+        }
+    }
 
     @Composable
     fun SettingsProvider(

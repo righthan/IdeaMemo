@@ -25,10 +25,12 @@ object SharedPreferencesUtils {
         val DAV_PASSWORD = stringPreferencesKey("dav_password")
         val MEMOS_LOGIN_SUCCESS = booleanPreferencesKey("memos_login_success")
         val MEMOS_SERVER_URL = stringPreferencesKey("memos_server_url")
-        val MEMOS_AUTH_TOKEN = stringPreferencesKey("memos_auth_token")
+        val MEMOS_USER_SESSION = stringPreferencesKey("memos_user_session")
         val MEMOS_USER_NAME = stringPreferencesKey("memos_user_name")
+        val MEMOS_USERNAME = stringPreferencesKey("memos_username")
         val MEMOS_USER_DISPLAY_NAME = stringPreferencesKey("memos_user_display_name")
         val MEMOS_USER_ROLE = stringPreferencesKey("memos_user_role")
+        val MEMOS_AVATAR_URL = stringPreferencesKey("memos_avatar_url")
         val MEMOS_TAG_COUNT = stringPreferencesKey("memos_tag_count")
         val MEMOS_TOTAL_MEMO_COUNT = stringPreferencesKey("memos_total_memo_count")
         val MEMOS_DISPLAY_TIMESTAMPS = stringPreferencesKey("memos_display_timestamps")
@@ -52,10 +54,12 @@ object SharedPreferencesUtils {
     
     val memosLoginSuccess: Flow<Boolean> = sharedPreferences.getBoolean(PreferencesKeys.MEMOS_LOGIN_SUCCESS, false)
     val memosServerUrl: Flow<String?> = sharedPreferences.getString(PreferencesKeys.MEMOS_SERVER_URL, "")
-    val memosAuthToken: Flow<String?> = sharedPreferences.getString(PreferencesKeys.MEMOS_AUTH_TOKEN, null)
+    val memosUserSession: Flow<String?> = sharedPreferences.getString(PreferencesKeys.MEMOS_USER_SESSION, null)
     val memosUserName: Flow<String?> = sharedPreferences.getString(PreferencesKeys.MEMOS_USER_NAME, null)
+    val memosUsername: Flow<String?> = sharedPreferences.getString(PreferencesKeys.MEMOS_USERNAME, null)
     val memosUserDisplayName: Flow<String?> = sharedPreferences.getString(PreferencesKeys.MEMOS_USER_DISPLAY_NAME, null)
     val memosUserRole: Flow<String?> = sharedPreferences.getString(PreferencesKeys.MEMOS_USER_ROLE, null)
+    val memosAvatarUrl: Flow<String?> = sharedPreferences.getString(PreferencesKeys.MEMOS_AVATAR_URL, null)
     
     val memosTagCount: Flow<String?> = sharedPreferences.getString(PreferencesKeys.MEMOS_TAG_COUNT, null)
     val memosTotalMemoCount: Flow<String?> = sharedPreferences.getString(PreferencesKeys.MEMOS_TOTAL_MEMO_COUNT, null)
@@ -76,10 +80,12 @@ object SharedPreferencesUtils {
         sharedPreferences.edit { preferences ->
             preferences[PreferencesKeys.MEMOS_LOGIN_SUCCESS] = false
             preferences.remove(PreferencesKeys.MEMOS_SERVER_URL)
-            preferences.remove(PreferencesKeys.MEMOS_AUTH_TOKEN)
+            preferences.remove(PreferencesKeys.MEMOS_USER_SESSION)
             preferences.remove(PreferencesKeys.MEMOS_USER_NAME)
+            preferences.remove(PreferencesKeys.MEMOS_USERNAME)
             preferences.remove(PreferencesKeys.MEMOS_USER_DISPLAY_NAME)
             preferences.remove(PreferencesKeys.MEMOS_USER_ROLE)
+            preferences.remove(PreferencesKeys.MEMOS_AVATAR_URL)
             preferences.remove(PreferencesKeys.MEMOS_TAG_COUNT)
             preferences.remove(PreferencesKeys.MEMOS_TOTAL_MEMO_COUNT)
             preferences.remove(PreferencesKeys.MEMOS_DISPLAY_TIMESTAMPS)
@@ -132,8 +138,8 @@ object SharedPreferencesUtils {
         updatePreference(PreferencesKeys.MEMOS_SERVER_URL, url)
     }
 
-    suspend fun updateMemosAuthToken(token: String?) {
-        updatePreference(PreferencesKeys.MEMOS_AUTH_TOKEN, token)
+    suspend fun updateMemosUserSession(session: String?) {
+        updatePreference(PreferencesKeys.MEMOS_USER_SESSION, session)
     }
 
     suspend fun updateMemosUserName(userName: String?) {
@@ -146,6 +152,14 @@ object SharedPreferencesUtils {
 
     suspend fun updateMemosUserRole(role: String?) {
         updatePreference(PreferencesKeys.MEMOS_USER_ROLE, role)
+    }
+
+    suspend fun updateMemosUsername(username: String?) {
+        updatePreference(PreferencesKeys.MEMOS_USERNAME, username)
+    }
+
+    suspend fun updateMemosAvatarUrl(avatarUrl: String?) {
+        updatePreference(PreferencesKeys.MEMOS_AVATAR_URL, avatarUrl)
     }
     
     suspend fun updateMemosTagCount(tagCountJson: String?) {
